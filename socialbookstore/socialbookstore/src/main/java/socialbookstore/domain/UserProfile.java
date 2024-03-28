@@ -2,14 +2,45 @@ package socialbookstore.domain;
 
 import java.util.List;
 
+import jakarta.persistence.*;
+
+
+@Entity
+@Table(name="user_profiles")
 public class UserProfile {
 	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="user_profile_id")
 	private int userProfileId;
+	
+	@Column(name="username_profile")
 	private String usernameProfile;
+	
+	@Column(name="full_name")
 	private String fullName;
+	
+	@Column(name="user_age")
 	private int userAge;
+	
+	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinTable(
+			name = "user_profile_author",
+			joinColumns = @JoinColumn(name="user_profile_id"),
+			inverseJoinColumns = @JoinColumn(name="author_id")
+	)
 	private List<BookAuthor> favouriteBookAuthors;
+	
+	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinTable(
+			name = "user_profile_book_category",
+			joinColumns = @JoinColumn(name="user_profile_id"),
+			inverseJoinColumns = @JoinColumn(name="category_id")
+	)
 	private List<BookCategory> favouriteBookCategories;
+	
+	@OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinColumn(name="book_id")
 	private List<Book> bookOffers;
 	
 	public UserProfile(String username, String fullName, int age) {
@@ -18,30 +49,86 @@ public class UserProfile {
 		this.userAge = age;
 	}
 	
+	
+	
 	public String getUsernameProfile() {
 		return usernameProfile;
 	}
-	
+
+
+
+	public void setUsernameProfile(String usernameProfile) {
+		this.usernameProfile = usernameProfile;
+	}
+
+
+
 	public String getFullName() {
 		return fullName;
 	}
-	
+
+
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+
+
 	public int getUserAge() {
 		return userAge;
 	}
-	
-	public List<BookAuthor> getFavouriteBookAuthors(){
+
+
+
+	public void setUserAge(int userAge) {
+		this.userAge = userAge;
+	}
+
+
+
+	public List<BookAuthor> getFavouriteBookAuthors() {
 		return favouriteBookAuthors;
 	}
-	
-	public List<BookCategory> getFavouriteBookCategories(){
+
+
+
+	public void setFavouriteBookAuthors(List<BookAuthor> favouriteBookAuthors) {
+		this.favouriteBookAuthors = favouriteBookAuthors;
+	}
+
+
+
+	public List<BookCategory> getFavouriteBookCategories() {
 		return favouriteBookCategories;
 	}
-	
-	public List<Book> getBookOffers(){
+
+
+
+	public void setFavouriteBookCategories(List<BookCategory> favouriteBookCategories) {
+		this.favouriteBookCategories = favouriteBookCategories;
+	}
+
+
+
+	public List<Book> getBookOffers() {
 		return bookOffers;
 	}
-	
+
+
+
+	public void setBookOffers(List<Book> bookOffers) {
+		this.bookOffers = bookOffers;
+	}
+
+
+
+	public void setUserProfileId(int userProfileId) {
+		this.userProfileId = userProfileId;
+	}
+
+
+
 	public void addFavouriteBookAuthor(BookAuthor bookAuthor) {
 		this.favouriteBookAuthors.add(bookAuthor);
 	}

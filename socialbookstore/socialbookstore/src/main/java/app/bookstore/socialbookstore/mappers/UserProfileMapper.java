@@ -1,11 +1,13 @@
-package mappers;
+package app.bookstore.socialbookstore.mappers;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import socialbookstore.domain.UserProfile;
+import app.bookstore.socialbookstore.domain.UserProfile;
 
+@Repository
 public interface UserProfileMapper extends JpaRepository<UserProfile, Integer>{
 	
 	Optional<UserProfile> findByUsername(String username);

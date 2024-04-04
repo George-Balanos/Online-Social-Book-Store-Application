@@ -1,4 +1,4 @@
-package socialbookstore.domain;
+package app.bookstore.socialbookstore.domain;
 
 import java.util.List;
 

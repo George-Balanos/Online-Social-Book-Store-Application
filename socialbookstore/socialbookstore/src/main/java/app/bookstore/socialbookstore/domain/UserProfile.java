@@ -26,8 +26,8 @@ public class UserProfile {
 	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(
 			name = "user_profile_author",
-			joinColumns = @JoinColumn(name="user_profile_id"),
-			inverseJoinColumns = @JoinColumn(name="author_id")
+			joinColumns = @JoinColumn(name="user_profile_id",referencedColumnName = "user_profile_id"),
+			inverseJoinColumns = @JoinColumn(name="author_id",referencedColumnName = "author_id")
 	)
 	private List<BookAuthor> favouriteBookAuthors;
 	
@@ -39,17 +39,19 @@ public class UserProfile {
 	)
 	private List<BookCategory> favouriteBookCategories;
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinColumn(name="book_id")
+	@ManyToMany(mappedBy = "requestingUsers")
 	private List<Book> bookOffers;
 	
 	public UserProfile(String username, String fullName, int age) {
+		super();
 		this.usernameProfile = username;
 		this.fullName = fullName;
 		this.userAge = age;
 	}
 	
-	
+	public UserProfile() {
+		super();
+	}
 	
 	public String getUsernameProfile() {
 		return usernameProfile;

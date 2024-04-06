@@ -14,23 +14,28 @@ public class BookAuthor {
 	private int authorId;
 	
 	@Column(name = "author_name")
-	private String authorName;
+	private String authorName; //name
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(
 		name = "author_book",
-		joinColumns = @JoinColumn(name = "author_id"),
-		inverseJoinColumns = @JoinColumn(name = "book_id")
+		joinColumns = @JoinColumn(
+				name = "author_id",referencedColumnName = "author_id"
+		),
+		inverseJoinColumns = @JoinColumn(
+				name = "book_id",referencedColumnName = "book_id")
 	)
 	private List<Book> books;
 	
-	public BookAuthor(int id, String name, List<Book> books) {
-		this.authorId = id;
+	public BookAuthor(String name, List<Book> books) {
+
 		this.authorName = name;
 		this.books = books;
 	}
 	
-	
+	public BookAuthor() {
+		
+	}
 	
 	public int getAuthorId() {
 		return authorId;

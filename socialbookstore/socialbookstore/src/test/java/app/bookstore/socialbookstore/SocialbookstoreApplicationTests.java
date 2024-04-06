@@ -8,6 +8,7 @@ class SocialbookstoreApplicationTests {
 
 	@Test
 	void contextLoads() {
+		
 	}
 
 }

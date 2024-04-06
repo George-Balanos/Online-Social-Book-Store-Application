@@ -10,6 +10,6 @@ import app.bookstore.socialbookstore.domain.BookCategory;
 @Repository
 public interface BookCategoryMapper extends JpaRepository<BookCategory, Integer>{
 	
-	List<BookCategory> findByName(String name);
+	List<BookCategory> findByCategoryName(String name);
 	
 }

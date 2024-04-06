@@ -17,8 +17,7 @@ public class Book {
 	@Column(name="title")
 	private String title;
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinColumn(name="author_id")
+	@ManyToMany(mappedBy = "books")
 	private List<BookAuthor> bookAuthors;
 	
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -29,24 +28,25 @@ public class Book {
 	@JoinTable(
 			name = "userprofile_book",
 			joinColumns = @JoinColumn(
-				name = "book_id", referencedColumnName = "id"	
+				name = "book_id", referencedColumnName = "book_id"	
 			),
 			inverseJoinColumns = @JoinColumn(
-				name = "userProfile_id", referencedColumnName = "id"
+				name = "userProfile_id", referencedColumnName = "user_profile_id"
 			)
 	)
 	private List<UserProfile> requestingUsers;
 	
-	public Book(int id, String title, List<BookAuthor> authors, BookCategory bookCategory) {
+	public Book(String title, List<BookAuthor> authors, BookCategory bookCategory) {
 		
-		this.bookId = id;
 		this.title = title;
 		this.bookAuthors = authors;
 		this.bookCategory = bookCategory;
 		
 	}
 	
-	
+	public Book() {
+		
+	}
 	
 	public int getBookId() {
 		return bookId;

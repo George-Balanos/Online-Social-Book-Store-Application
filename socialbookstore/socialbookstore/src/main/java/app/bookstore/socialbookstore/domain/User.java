@@ -17,7 +17,7 @@ public class User implements UserDetails{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="user_id")
-	private int userId;
+	private int userId;//id
 	
 	@Column(name="username")
 	private String username;
@@ -28,6 +28,10 @@ public class User implements UserDetails{
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE}) // ?
 	@JoinColumn(name="role_id") // ? 
 	private Role role;
+	
+	public User() {
+		super();
+	}
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

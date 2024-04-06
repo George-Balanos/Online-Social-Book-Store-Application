@@ -10,7 +10,7 @@ import app.bookstore.socialbookstore.domain.UserProfile;
 @Repository
 public interface UserProfileMapper extends JpaRepository<UserProfile, Integer>{
 	
-	Optional<UserProfile> findByUsername(String username);
+	Optional<UserProfile> findByUsernameProfile(String username);
 	Optional<UserProfile> findByFullName(String fullName);
 	Optional<UserProfile> findByUsernameProfileAndUserProfileId(String username, int userProfileId);
 	

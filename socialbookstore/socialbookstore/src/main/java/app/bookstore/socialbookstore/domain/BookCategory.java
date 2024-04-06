@@ -15,21 +15,21 @@ public class BookCategory {
 	private int categoryId;
 	
 	@Column(name="category_name")
-	private String categoryName;
+	private String categoryName;//name
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinColumn(name="book_id")
+	@OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "bookId")
 	private List<Book> booksInCategory;
 	
-	public BookCategory(int id, String name, List<Book> books) {
+	public BookCategory(String name, List<Book> books) {
 		
-		this.categoryId = id;
 		this.categoryName = name;
 		this.booksInCategory = books;
 		
 	}
 	
-	
+	public BookCategory() {
+		super();
+	}
 	
 	public int getCategoryId() {
 		return categoryId;

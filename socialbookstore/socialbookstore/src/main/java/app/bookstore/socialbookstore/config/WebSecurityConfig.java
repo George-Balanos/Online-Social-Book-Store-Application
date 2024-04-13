@@ -2,6 +2,7 @@ package app.bookstore.socialbookstore.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -13,6 +14,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import app.bookstore.socialbookstore.services.UserServiceImpl;
 
+@Configuration
 public class WebSecurityConfig {
 	
 	@Autowired
@@ -48,9 +50,8 @@ public class WebSecurityConfig {
     	
                 http.authorizeHttpRequests(
                 		(authz) -> authz
-                		.requestMatchers("/", "/login", "/register", "/save").permitAll()
-                        .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
-                        .requestMatchers("/user/**").hasAnyAuthority("USER") // ??? ZAS is this needed ??? - changed from account to user
+                		.requestMatchers("/", "/login", "/register", "/save", "/css/**", "**.png" , "**.jpg").permitAll()
+                        .requestMatchers("/**").hasAnyAuthority("USER") // ??? ZAS is this needed ??? - changed from account to user
                         .anyRequest().authenticated()
                 		);
                 

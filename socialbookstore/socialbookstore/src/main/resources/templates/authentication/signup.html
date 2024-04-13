@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/credentials.css">
+    <script src="https://kit.fontawesome.com/967252b7d1.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
+        integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous" />
+    <title>signup</title>
+</head>
+
+<body>
+    <section>
+        <img th:src="@{/css/37916.jpg}" class="bg"></img>
+        <div class="login">
+        	<form th:action="@{/save}" method="post">
+	            <div class="wrapper">
+	                <!-- Add homeButton next to the heading -->
+	                <h2 id="header_message">Become a member!</h2>
+	                <div class="inputBox">
+	                    <input type="text" id="name" name="username" placeholder="Username">
+	                </div>
+	                <div class="inputBox">
+	                    <input type="password" id="password" name="password" placeholder="Password">
+	                </div>
+	                <div class="inputBox">
+	                    <input type="password" id="password" name="fullName" placeholder="Confirm password">
+	                </div>
+	                <div class="inputBox">
+	                    <input type="submit" value="Sign up" id="btn">
+	                </div>
+	                <div class="signup">
+	                    <p>Already have an account? <a href="@{login}">Sign in</a></p>
+	                </div>
+	            </div>
+	    	</form>
+        </div>
+    </section>
+</body>
+
+</html>

@@ -25,17 +25,16 @@ public class User implements UserDetails{
 	@Column(name="password")
 	private String password;
 	
-	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE}) // ?
-	@JoinColumn(name="role_id") // ? 
 	private Role role;
 	
 	public User() {
 		super();
+		this.role = Role.USER;
 	}
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.name());
+		SimpleGrantedAuthority authority = new SimpleGrantedAuthority("USER");
 	    return Collections.singletonList(authority);
 	}
 	@Override

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.DefaultRedirectStrategy;
@@ -13,6 +14,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+@Configuration
 public class CustomSecuritySuccessHandler extends SimpleUrlAuthenticationSuccessHandler{
 	
 	@Override
@@ -40,10 +42,8 @@ public class CustomSecuritySuccessHandler extends SimpleUrlAuthenticationSuccess
 			roles.add(a.getAuthority());
 		}
 		
-		if (roles.contains("ADMIN")) {
-			url = "/admin/dashboard";
-		}else if (roles.contains("USER")) {
-			url = "/user/dashboard";
+		if (roles.contains("USER")) {
+			url = "success";
 		}
 		
 		return url;

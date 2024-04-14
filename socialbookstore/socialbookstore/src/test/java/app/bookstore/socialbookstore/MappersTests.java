@@ -61,6 +61,7 @@ public class MappersTests {
     @Before
     public void setUp() {
         userProfile = new UserProfile("Mpal", "George Mpal", 21);
+        userProfile.setUserProfileId(1);
         
         bookAuthor = new BookAuthor("VC",null);
         bookCategory = new BookCategory("Sci-fi",null);
@@ -101,11 +102,13 @@ public class MappersTests {
     
     @Test
     public void testDeleteUserProfile() {
-    	Optional<UserProfile> userProfileOptional = userProfileMapper.findByFullName("George Mpal");
-    	assertTrue(userProfileOptional.isPresent());
-    	
-    	userProfileMapper.delete(userProfile);
-    	Optional<UserProfile> userProfileOptionalAfterDeletion = userProfileMapper.findByFullName("George Mpal");
+        Optional<UserProfile> userProfileOptional = userProfileMapper.findByFullName("George Mpal");
+        assertTrue(userProfileOptional.isPresent());
+        
+        UserProfile userProfileToDelete = userProfileOptional.get();
+        userProfileMapper.delete(userProfileToDelete);
+
+        Optional<UserProfile> userProfileOptionalAfterDeletion = userProfileMapper.findByFullName("George Mpal");
         assertTrue(!userProfileOptionalAfterDeletion.isPresent()); 
     }
 

@@ -44,5 +44,11 @@ public class UserServiceImpl implements UserService, UserDetailsService{
 		Optional<User> storedUser = userMapper.findByUsername(user.getUsername());
 		return storedUser.isPresent();
 	}
+
+	@Override
+	public Optional<User> getUser(String username) {
+		Optional<User> storedUser = userMapper.findByUsername(username);
+		return storedUser;
+	}
 	
 }

@@ -1,0 +1,129 @@
+:root {
+    --main-color: #3f3949;
+}
+
+body {
+    font-family: "Comic Sans MS" , sans-serif;
+    margin: 0;
+    padding: 0;
+
+    background-image: url("open-book-with-fairytale-scene.jpg");
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+header {
+    color: white;
+    padding: 10px;
+    text-align: center;
+
+    background-color: rgba(255, 255, 255, 0.05); /* Semi-transparent white */
+    backdrop-filter: blur(10px); /* Add a blur effect */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.info{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    text-align: start;
+
+    text-decoration:white underline !important; 
+}
+
+.sidebar {
+    background-color: rgba(255, 255, 255, 0.08); /* Semi-transparent white */
+    backdrop-filter: blur(10px); /* Add a blur effect */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+    width: 200px;
+    
+    margin-top: 30px;
+    margin-bottom: 30px;
+    margin-left: 20px;
+    border-radius: 15px;
+
+
+    height: calc(100vh - 40px);
+    overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    transition: margin-left 0.4s ease-in-out;
+}
+
+.sidebar:hover {
+    margin-left: 30px;
+}
+
+a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 19px;
+    height: 50px;
+
+    padding-left: 10px;
+    padding-right: 10px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+a:hover, a:active {
+    text-decoration: none;
+    color: var(--main-color);
+    
+}
+
+a:hover{
+    transition: all 0.4s ease-in-out;
+    color: white;
+    background-color: var(--main-color);
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+footer {
+    color: white;
+    padding: 10px;
+    text-align: center;
+
+    background-color: rgba(255, 255, 255, 0.05); /* Semi-transparent white */
+    backdrop-filter: blur(10px); /* Add a blur effect */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+input[type="text"] {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 20px;
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #555;
+}

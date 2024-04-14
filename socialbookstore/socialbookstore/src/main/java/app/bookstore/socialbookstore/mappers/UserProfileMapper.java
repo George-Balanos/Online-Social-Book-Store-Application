@@ -13,5 +13,5 @@ public interface UserProfileMapper extends JpaRepository<UserProfile, Integer>{
 	Optional<UserProfile> findByUsernameProfile(String username);
 	Optional<UserProfile> findByFullName(String fullName);
 	Optional<UserProfile> findByUsernameProfileAndUserProfileId(String username, int userProfileId);
-	
+	Optional<UserProfile> findByUserProfileId(int id);
 }

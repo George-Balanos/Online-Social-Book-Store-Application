@@ -10,7 +10,6 @@ import jakarta.persistence.*;
 public class UserProfile {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="user_profile_id")
 	private int userProfileId;
 	

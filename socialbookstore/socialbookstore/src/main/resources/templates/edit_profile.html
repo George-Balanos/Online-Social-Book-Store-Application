@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/credentials.css">
+    <script src="https://kit.fontawesome.com/967252b7d1.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
+        integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous" />
+    <title>Edit Profile</title>
+    <style>
+        .fas.fa-home {
+            color: #4CAF50; 
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <img src="/css/37916.jpg" class="bg"></img>
+        <div class="login">
+            <form th:action="@{/updateProfile}" method="post"> 
+                <div class="wrapper">
+         
+                    <h2 id="header_message"><a href="/success"><i class="fas fa-home"></i></a> Edit your Information!</h2>
+                    <div class="inputBox">
+                        <input type="text" id="name" name="username_profile" placeholder="Username">
+                    </div>
+                    <br>
+                    <div class="inputBox">
+                        <input type="text" id="name" name="full_name" placeholder="Full Name">
+                    </div>
+                    <br>
+                    <div class="inputBox">
+                        <input type="text" id="name" name="user_age" placeholder="Age">
+                    </div>
+                    <div class="inputBox">
+                        <input type="submit" value="Update Information" id="btn">
+                    </div>
+                    
+                </div>
+            </form>
+        </div>
+    </section>
+</body>
+
+</html>

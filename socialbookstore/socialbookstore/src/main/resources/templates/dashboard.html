@@ -3,15 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard</title>
+    <title>Homepage</title>
+    <link rel="stylesheet" href="/css/homepage.css">
 </head>
 <body>
-    <h1>Welcome to Your Dashboard!</h1>
-    <p>This is your personalized dashboard where you can manage your account, view your profile, and access various features.</p>
-    <ul>
-        <li><a href="/profile">View Profile</a></li>
-        <li><a href="/account">Manage Account</a></li>
-        <!-- Add more links to other dashboard features as needed -->
-    </ul>
+    <div class="container">
+        <header>
+            <div class="info">
+                <span th:if="${currentUser != null and currentUser.isPresent()}" th:text="${'Username: '+currentUser.get().getUsernameProfile()}"></span>
+                <span th:unless="${currentUser != null and currentUser.isPresent()}">Username: N/A</span>
+                <span th:action="@{/success/showInfo}" th:text="${'Full name: '+currentUser.get().getFullName()}"></span>
+            </div>
+            <h1>Homepage</h1>
+            <form action="#" method="GET">
+                <input type="text" name="search" placeholder="Search...">
+                <input type="submit" value="Search">
+            </form>
+        </header>
+        <div class="sidebar">
+        	<a href="#" class="sidebar-link">My book offers</a>
+        	<a href="#" class="sidebar-link">Book offers</a>
+        	<a href="#" class="sidebar-link">Favourites</a>
+            <a th:href="@{recommendations}" class="sidebar-link">Recommendations</a>
+            <a th:href="@{edit_profile}" class="sidebar-link">Profile Settings</a>
+        </div>
+        <footer>
+            <p>&copy; Magic Bookstore<span id="currentYear"> 2024</span></p>
+            <br>
+        </footer>
+    </div>
 </body>
 </html>

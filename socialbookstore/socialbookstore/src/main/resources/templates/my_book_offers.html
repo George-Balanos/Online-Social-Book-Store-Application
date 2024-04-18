@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recommendation Page</title>
+  <link rel="stylesheet" href="/css/my_book_offers.css">
+  <script src="https://kit.fontawesome.com/967252b7d1.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="bg-image"></div>
+  <div class="center">
+    <a href="/success" class="home-button"><i class="fas fa-home"></i></a>
+    <div class="container">
+      <div class="item">
+        <a href="#" class="delete-button"><i class="fas fa-trash-alt"></i></a>
+        <a th:href="@{book_offer_form}" class="plus-button"><i class="fas fa-plus"></i></a>
+        <h3 class="make-offer">Make a Book Offer</h3>
+        <p>Contribute by making an offer!</p>
+      </div>
+      <div class="item">
+        <a href="#" class="delete-button"><i class="fas fa-trash-alt"></i></a>
+        <img src="https://via.placeholder.com/150" alt="Recommendation 1">
+        <h3>Recommendation 1</h3>
+        <p>Description of recommendation 1.</p>
+      </div>
+      <div class="item">
+        <a href="#" class="delete-button"><i class="fas fa-trash-alt"></i></a>
+        <img src="https://via.placeholder.com/150" alt="Recommendation 2">
+        <h3>Recommendation 2</h3>
+        <p>Description of recommendation 2.</p>
+      </div>
+      <!-- Add more recommendation items here -->
+    </div>
+  </div>
+</body>
+</html>

@@ -1,8 +1,10 @@
 package app.bookstore.socialbookstore;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +27,7 @@ import app.bookstore.socialbookstore.mappers.UserProfileMapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import static org.junit.Assert.assertTrue;
+
 
 
 @RunWith(SpringRunner.class)
@@ -160,8 +162,8 @@ public class MappersTests {
     	Optional<Book> savedBookOptional = bookMapper.findById(book.getBookId());
     	assertTrue(savedBookOptional.isPresent());
     	
-    	BookAuthor bookAuthor2 = new BookAuthor("Mpal",bookAuthor.getBooks());
-    	book.getBookAuthors().add(bookAuthor2);
+    	BookCategory bookCategory2 = new BookCategory("Drama",bookCategory.getBooksInCategory());
+    	book.setBookCategory(bookCategory2);
     	
     	bookMapper.save(book);
     	
@@ -169,14 +171,14 @@ public class MappersTests {
     	
     	Book book = savedBookOptionalAfterUpdate.get();
     	
-    	assertEquals(2, book.getBookAuthors().size());
+    	assertEquals("Drama", book.getBookCategory().getCategoryName());
     }
     
     
     @Test
     public void testSaveBookAuthor() {
-    	List<BookAuthor> savedBookAuthor = bookAuthorMapper.findByAuthorName(bookAuthor.getAuthorName());
-    	assertEquals(savedBookAuthor.size(),1);
+    	Optional<BookAuthor> savedBookAuthor = bookAuthorMapper.findByAuthorName(bookAuthor.getAuthorName());
+    	assertEquals(savedBookAuthor.get().getAuthorName(),bookAuthor.getAuthorName());
     	
     	List<Book> books2 = new ArrayList<>();
     	
@@ -188,38 +190,36 @@ public class MappersTests {
     	
     	bookAuthorMapper.save(bookAuthor2);
     	
-    	List<BookAuthor> savedBookAuthorAfter = bookAuthorMapper.findByAuthorName(bookAuthor2.getAuthorName());
+    	Optional<BookAuthor> savedBookAuthorAfter = bookAuthorMapper.findByAuthorName(bookAuthor2.getAuthorName());
     	
-    	assertEquals(2,savedBookAuthorAfter.size());
+    	assertEquals(savedBookAuthorAfter.get().getAuthorName(),bookAuthor.getAuthorName());
     }
     
     
     @Test
     public void testDeleteBookAuthor() {
-    	List<BookAuthor> savedBookAuthor = bookAuthorMapper.findByAuthorName(bookAuthor.getAuthorName());
-    	assertEquals(savedBookAuthor.size(),1);
+    	Optional<BookAuthor> savedBookAuthor = bookAuthorMapper.findByAuthorName(bookAuthor.getAuthorName());
+    	assertEquals(savedBookAuthor.get().getAuthorName(),bookAuthor.getAuthorName());
     	
     	bookAuthorMapper.delete(bookAuthor);
     	
-    	List<BookAuthor> savedBookAuthorAfterDeletion = bookAuthorMapper.findByAuthorName(bookAuthor.getAuthorName());
+    	Optional<BookAuthor> savedBookAuthorAfterDeletion = bookAuthorMapper.findByAuthorName(bookAuthor.getAuthorName());
     	
-    	assertEquals(0,savedBookAuthorAfterDeletion.size());
+    	assertTrue(savedBookAuthorAfterDeletion.isEmpty());
     }
     
     
     @Test
     public void testUpdateBookAuthor() {
-    	List<BookAuthor> savedBookAuthor = bookAuthorMapper.findByAuthorName(bookAuthor.getAuthorName());
-    	assertEquals(savedBookAuthor.size(),1);
+    	Optional<BookAuthor> savedBookAuthor = bookAuthorMapper.findByAuthorName(bookAuthor.getAuthorName());
+    	assertEquals(savedBookAuthor.get().getAuthorName(),bookAuthor.getAuthorName());
     	
     	bookAuthor.setAuthorName("Mpal");
     	bookAuthorMapper.save(bookAuthor);
     	
-    	List<BookAuthor> savedBookAuthorAfterUpdate = bookAuthorMapper.findByAuthorName("Mpal");
+    	Optional<BookAuthor> savedBookAuthorAfterUpdate = bookAuthorMapper.findByAuthorName("Mpal");
     	
-    	assertEquals(savedBookAuthorAfterUpdate.size(),1);
-    	assertEquals(savedBookAuthorAfterUpdate.get(0).getAuthorName(),"Mpal");
-    	
+    	assertEquals(savedBookAuthorAfterUpdate.get().getAuthorName(),"Mpal");	
     }
     
     @Test

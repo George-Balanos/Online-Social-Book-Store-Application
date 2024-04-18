@@ -9,10 +9,6 @@ import jakarta.persistence.*;
 public class BookAuthor {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="author_id")
-	private int authorId;
-	
 	@Column(name = "author_name")
 	private String authorName; //name
 	
@@ -20,7 +16,7 @@ public class BookAuthor {
 	@JoinTable(
 		name = "author_book",
 		joinColumns = @JoinColumn(
-				name = "author_id",referencedColumnName = "author_id"
+				name = "author_name",referencedColumnName = "author_name"
 		),
 		inverseJoinColumns = @JoinColumn(
 				name = "book_id",referencedColumnName = "book_id")
@@ -36,18 +32,6 @@ public class BookAuthor {
 	public BookAuthor() {
 		
 	}
-	
-	public int getAuthorId() {
-		return authorId;
-	}
-
-
-
-	public void setAuthorId(int authorId) {
-		this.authorId = authorId;
-	}
-
-
 
 	public String getAuthorName() {
 		return authorName;
@@ -59,19 +43,13 @@ public class BookAuthor {
 		this.authorName = authorName;
 	}
 
-
-
 	public List<Book> getBooks() {
 		return books;
 	}
 
-
-
 	public void setBooks(List<Book> books) {
 		this.books = books;
 	}
-
-
 
 	public void addBook(Book authorBook) {
 		books.add(authorBook);

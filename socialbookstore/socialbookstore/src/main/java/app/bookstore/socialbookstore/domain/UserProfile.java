@@ -26,7 +26,7 @@ public class UserProfile {
 	@JoinTable(
 			name = "user_profile_author",
 			joinColumns = @JoinColumn(name="user_profile_id",referencedColumnName = "user_profile_id"),
-			inverseJoinColumns = @JoinColumn(name="author_id",referencedColumnName = "author_id")
+			inverseJoinColumns = @JoinColumn(name="author_name",referencedColumnName = "author_name")
 	)
 	private List<BookAuthor> favouriteBookAuthors;
 	

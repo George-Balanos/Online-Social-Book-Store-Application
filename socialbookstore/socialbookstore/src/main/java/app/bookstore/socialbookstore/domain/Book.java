@@ -1,7 +1,6 @@
 package app.bookstore.socialbookstore.domain;
 
 import java.util.List;
-
 import jakarta.persistence.*;
 
 
@@ -36,6 +35,10 @@ public class Book {
 	)
 	private List<UserProfile> requestingUsers;
 	
+	@Column(name="book_owner_id")
+    private int bookOwnerId;
+	
+
 	public Book(String title, List<BookAuthor> authors, BookCategory bookCategory) {
 		
 		this.title = title;
@@ -48,6 +51,15 @@ public class Book {
 		
 	}
 	
+	
+	public int getBookOwnerId() {
+		return bookOwnerId;
+	}
+
+	public void setBookOwnerId(int bookOwnerId) {
+		this.bookOwnerId = bookOwnerId;
+	}
+
 	public int getBookId() {
 		return bookId;
 	}

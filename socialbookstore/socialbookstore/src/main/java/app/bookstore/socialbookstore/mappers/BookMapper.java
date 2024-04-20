@@ -12,5 +12,6 @@ public interface BookMapper extends JpaRepository<Book, Integer>{
 	
 	List<Book> findByTitle(String title);	//Exact query.
 	List<Book> findByTitleContaining(String title);	//Inexact query.
+	List<Book> findByBookOwnerId(int id);
 	
 }

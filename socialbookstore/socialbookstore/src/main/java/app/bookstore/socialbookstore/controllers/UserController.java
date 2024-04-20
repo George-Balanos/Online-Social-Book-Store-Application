@@ -20,6 +20,7 @@ import app.bookstore.socialbookstore.domain.User;
 import app.bookstore.socialbookstore.domain.UserProfile;
 import app.bookstore.socialbookstore.mappers.BookMapper;
 import app.bookstore.socialbookstore.services.BookAuthorsService;
+import app.bookstore.socialbookstore.services.BookService;
 import app.bookstore.socialbookstore.services.UserProfileService;
 import app.bookstore.socialbookstore.services.UserService;
 
@@ -35,7 +36,7 @@ public class UserController {
 	BookAuthorsService bookAuthorService;
 	
 	@Autowired
-	BookMapper bookMapper;
+	BookService bookService;
 	
 	@RequestMapping("/success")
 	public String getUserHome(Model model) {
@@ -68,6 +69,17 @@ public class UserController {
 	
 	@RequestMapping("/my_book_offers")
     public String showMyBookOffers(Model model) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		System.err.println(currentPrincipalName);
+		Optional<User> user = userService.getUser(currentPrincipalName);
+		Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
+		
+		int id = currentUser.get().getUserProfileId();
+		
+		List<Book> myBookOffers = userProfileService.getMyBookOffers(id);
+		model.addAttribute("myBookOffers",myBookOffers);
+		
         return "my_book_offers";
     }
 	
@@ -89,6 +101,13 @@ public class UserController {
 		
 		BookCategory category = new BookCategory(bookCategory,null);
 		Book book = new Book(title,null,category);
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		Optional<User> user = userService.getUser(currentPrincipalName);
+		Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
+		
+		book.setBookOwnerId(currentUser.get().getUserProfileId());
 
 		// Split bookAuthors by comma
 	    String[] authorNames = bookAuthors.split(",");
@@ -97,12 +116,15 @@ public class UserController {
 	    List<BookAuthor> authors = new ArrayList<>();
 	    for (String authorName : authorNames) {
 	        if(bookAuthorService.isPresent(authorName)) {
-	        	System.out.println("IFFFFFFFFF222");
 	        	System.out.println(bookAuthorService.isPresent(authorName));
 	        	bookAuthorService.getByAuthorName(authorName).get().addBook(book);
 	        }else {
-	        	System.out.println("elseeeee");
 	        	BookAuthor author = new BookAuthor(authorName.trim(),null); // Trim whitespace around author name
+	        	
+	        	List<Book> tempBooks = new ArrayList<>();
+	        	tempBooks.add(book);
+	        	author.setBooks(tempBooks);
+	        	
 	        	bookAuthorService.saveBookAuthor(author); 
 	        	System.out.println("Author:" + authorName);
 	        	authors.add(author);
@@ -111,9 +133,8 @@ public class UserController {
 	    
 	    book.setBookAuthors(authors);
 	    
-	    bookMapper.save(book);
-		
-		return "redirect:/success";
+	    bookService.saveBook(book);
+		return "redirect:/my_book_offers";
     }
 	
 	@PostMapping("/updateProfile")

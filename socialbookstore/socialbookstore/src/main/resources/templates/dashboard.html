@@ -14,6 +14,12 @@
                 <span th:unless="${currentUser != null and currentUser.isPresent()}">Username: N/A</span>
                 <span th:action="@{/success/showInfo}" th:text="${'Full name: '+currentUser.get().getFullName()}"></span>
             </div>
+            <div class="logout"> <!-- Added div for logout button -->
+                <form th:action="@{/logout}" method="post"> 
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    <button type="submit">Log Out</button>
+                </form>
+            </div>
             <h1>Homepage</h1>
             <form action="#" method="GET">
                 <input type="text" name="search" placeholder="Search...">
@@ -21,9 +27,9 @@
             </form>
         </header>
         <div class="sidebar">
-        	<a th:href="@{my_book_offers}" class="sidebar-link">My book offers</a>
-        	<a href="#" class="sidebar-link">Book offers</a>
-        	<a href="#" class="sidebar-link">Favourites</a>
+            <a th:href="@{my_book_offers}" class="sidebar-link">My book offers</a>
+            <a href="#" class="sidebar-link">Book offers</a>
+            <a href="#" class="sidebar-link">Favourites</a>
             <a th:href="@{recommendations}" class="sidebar-link">Recommendations</a>
             <a th:href="@{edit_profile}" class="sidebar-link">Profile Settings</a>
         </div>

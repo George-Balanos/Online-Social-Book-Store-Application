@@ -127,3 +127,26 @@ input[type="submit"] {
 input[type="submit"]:hover {
     background-color: #555;
 }
+
+.logout {
+    position: fixed; 
+    top: 20px; 
+    right: 20px; 
+}
+
+.logout button {
+    background-color: #001f3f; 
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px; 
+    padding: 10px 20px; 
+    border-radius: 5px; 
+    transition: background-color 0.3s;
+}
+
+.logout button:hover {
+    background-color: white; 
+    color: #001f3f; 
+    opacity: 0.8; 
+}

@@ -18,18 +18,13 @@
         <h3 class="make-offer">Make a Book Offer</h3>
         <p>Contribute by making an offer!</p>
       </div>
-      <div class="item">
-        <a href="#" class="delete-button"><i class="fas fa-trash-alt"></i></a>
+      <div class="item" th:each="tempBook : ${myBookOffers}">
+      	<a href="#" class="delete-button"><i class="fas fa-trash-alt"></i></a>
         <img src="https://via.placeholder.com/150" alt="Recommendation 1">
-        <h3>Recommendation 1</h3>
+        <h3><p th:text="'Book title: '+${tempBook.title}"></p></h3>
         <p>Description of recommendation 1.</p>
       </div>
-      <div class="item">
-        <a href="#" class="delete-button"><i class="fas fa-trash-alt"></i></a>
-        <img src="https://via.placeholder.com/150" alt="Recommendation 2">
-        <h3>Recommendation 2</h3>
-        <p>Description of recommendation 2.</p>
-      </div>
+      
       <!-- Add more recommendation items here -->
     </div>
   </div>

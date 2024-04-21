@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+```<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My book offers</title>
+    <title>Recommendation Page</title>
     <link rel="stylesheet" href="/css/my_book_offers.css">
     <script src="https://kit.fontawesome.com/967252b7d1.js" crossorigin="anonymous"></script>
     <style>
@@ -21,8 +21,8 @@
     <a href="/success" class="home-button"><i class="fas fa-home"></i></a>
     <div class="container">
         <div class="item">
-            <a href="/book_offer_form" class="plus-button"><i class="fas fa-plus"></i></a>
-            <h3 class="make-offer">Make a Book Offer</h3>
+            <a th:href="@{show_authors}" class="plus-button"><i class="fas fa-plus"></i></a>
+            <h3 class="make-offer">Add your Favourite Author</h3>
             <p>Contribute by making an offer!</p>
         </div>
         <div class="item" th:each="tempBook : ${myBookOffers}">
@@ -60,4 +60,4 @@
     });
 </script>
 </body>
-</html>
+</html>```

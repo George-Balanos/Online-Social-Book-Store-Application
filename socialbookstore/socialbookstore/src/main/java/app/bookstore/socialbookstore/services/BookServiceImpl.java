@@ -10,6 +10,7 @@ import app.bookstore.socialbookstore.domain.Book;
 import app.bookstore.socialbookstore.domain.BookAuthor;
 import app.bookstore.socialbookstore.mappers.BookAuthorMapper;
 import app.bookstore.socialbookstore.mappers.BookMapper;
+import jakarta.transaction.Transactional;
 
 @Service
 public class BookServiceImpl implements BookService{
@@ -40,5 +41,20 @@ public class BookServiceImpl implements BookService{
 		
 		return matchedBooks;
 	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    @Transactional
+    public void deleteBookOfferByTitle(String title) {
+        List<Book> matchedBooks = bookMapper.findByTitle(title);
+        System.out.println("Size: " + matchedBooks.size());
 
+        bookMapper.deleteInBatch(matchedBooks);
+        bookMapper.flush(); 
+	}
+
+	@Override
+	public Optional<Book> getById(int id) {
+		return bookMapper.findByBookId(id);
+	}
 }

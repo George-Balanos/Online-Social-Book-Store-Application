@@ -1,6 +1,7 @@
 package app.bookstore.socialbookstore.domain;
 
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.*;
 
@@ -28,7 +29,7 @@ public class UserProfile {
 			joinColumns = @JoinColumn(name="user_profile_id",referencedColumnName = "user_profile_id"),
 			inverseJoinColumns = @JoinColumn(name="author_name",referencedColumnName = "author_name")
 	)
-	private List<BookAuthor> favouriteBookAuthors;
+	private Set<BookAuthor> favouriteBookAuthors;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(
@@ -36,10 +37,10 @@ public class UserProfile {
 			joinColumns = @JoinColumn(name="user_profile_id"),
 			inverseJoinColumns = @JoinColumn(name="category_id")
 	)
-	private List<BookCategory> favouriteBookCategories;
+	private Set<BookCategory> favouriteBookCategories;
 	
 	@ManyToMany(mappedBy = "requestingUsers")
-	private List<Book> bookOffers;
+	private Set<Book> bookOffers;
 	
 	public UserProfile(String username, String fullName, int age) {
 		super();
@@ -50,6 +51,7 @@ public class UserProfile {
 	
 	public UserProfile() {
 		super();
+		
 	}
 	
 	public String getUsernameProfile() {
@@ -88,37 +90,37 @@ public class UserProfile {
 
 
 
-	public List<BookAuthor> getFavouriteBookAuthors() {
+	public Set<BookAuthor> getFavouriteBookAuthors() {
 		return favouriteBookAuthors;
 	}
 
 
 
-	public void setFavouriteBookAuthors(List<BookAuthor> favouriteBookAuthors) {
+	public void setFavouriteBookAuthors(Set<BookAuthor> favouriteBookAuthors) {
 		this.favouriteBookAuthors = favouriteBookAuthors;
 	}
 
 
 
-	public List<BookCategory> getFavouriteBookCategories() {
+	public Set<BookCategory> getFavouriteBookCategories() {
 		return favouriteBookCategories;
 	}
 
 
 
-	public void setFavouriteBookCategories(List<BookCategory> favouriteBookCategories) {
+	public void setFavouriteBookCategories(Set<BookCategory> favouriteBookCategories) {
 		this.favouriteBookCategories = favouriteBookCategories;
 	}
 
 
 
-	public List<Book> getBookOffers() {
+	public Set<Book> getBookOffers() {
 		return bookOffers;
 	}
 
 
 
-	public void setBookOffers(List<Book> bookOffers) {
+	public void setBookOffers(Set<Book> bookOffers) {
 		this.bookOffers = bookOffers;
 	}
 

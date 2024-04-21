@@ -1,5 +1,6 @@
 package app.bookstore.socialbookstore.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +41,22 @@ public class UserProfileImpl implements UserProfileService{
 	@Override
 	public List<Book> getMyBookOffers(int id) {
 		return bookMapper.findByBookOwnerId(id);
+	}
+
+	@Override
+	public List<Book> getAllBookOffers(int id) {
+		List<Book> otherBooks = new ArrayList<>();
+        List<Book> allBooks = bookMapper.findAll();
+
+        for (Book book : allBooks) {
+            if (book.getBookOwnerId() != id) {
+                otherBooks.add(book);
+            }
+        }
+
+        System.out.println(otherBooks.size());
+        
+        return otherBooks;
 	}
 
 }

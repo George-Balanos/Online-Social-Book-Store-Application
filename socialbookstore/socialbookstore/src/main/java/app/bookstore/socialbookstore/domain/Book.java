@@ -1,6 +1,9 @@
 package app.bookstore.socialbookstore.domain;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
 import jakarta.persistence.*;
 
 
@@ -33,7 +36,7 @@ public class Book {
 				name = "userProfile_id", referencedColumnName = "user_profile_id"
 			)
 	)
-	private List<UserProfile> requestingUsers;
+	private Set<UserProfile> requestingUsers;
 	
 	@Column(name="book_owner_id")
     private int bookOwnerId;
@@ -44,7 +47,6 @@ public class Book {
 		this.title = title;
 		this.bookAuthors = authors;
 		this.bookCategory = bookCategory;
-		
 	}
 	
 	public Book() {
@@ -108,13 +110,13 @@ public class Book {
 
 
 
-	public List<UserProfile> getRequestingUsers() {
+	public Set<UserProfile> getRequestingUsers() {
 		return requestingUsers;
 	}
 
 
 
-	public void setRequestingUsers(List<UserProfile> requestingUsers) {
+	public void setRequestingUsers(Set<UserProfile> requestingUsers) {
 		this.requestingUsers = requestingUsers;
 	}
 

@@ -1,0 +1,74 @@
+```<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendation Page</title>
+    <link rel="stylesheet" href="/css/my_book_offers.css">
+    <script src="https://kit.fontawesome.com/967252b7d1.js" crossorigin="anonymous"></script>
+    <style>
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Adjust height as needed */
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            max-width: 800px; /* Adjust max-width as needed */
+        }
+
+        .item {
+            margin: 20px;
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.15); /* Semi-transparent white */
+            backdrop-filter: blur(10px); /* Add a blur effect */
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(255, 255, 255, 0.5); /* White shadow */
+        }
+
+        .plus-button {
+            display: inline-block;
+            width: 100px; /* Set a fixed width for the circle */
+            height: 100px; /* Set a fixed height for the circle */
+            font-size: 24px;
+            color: white;
+            background-color: rgba(0, 128, 0, 0.8); /* Green color for icon */
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 128, 0, 0.4); /* Green shadow for icon */
+            text-decoration: none;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .plus-button:hover {
+            background-color: rgba(0, 128, 0, 1);
+        }
+    </style>
+</head>
+<body>
+<div class="bg-image"></div>
+<div class="center">
+    <a href="/success" class="home-button"><i class="fas fa-home"></i></a>
+    <div class="container">
+        <div class="item">
+            <a th:href="@{favourite_authors}" class="plus-button"><i class="fas fa-user"></i></a>
+            <h3 class="make-offer">See your favourite authors</h3>
+        </div>
+        <div class="item">
+            <a th:href="@{favourite_categories}" class="plus-button"><i class="fas fa-star"></i></a>
+            <h3 class="make-offer">See your favourite categories</h3>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+```

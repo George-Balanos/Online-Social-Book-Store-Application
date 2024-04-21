@@ -52,6 +52,8 @@ body {
     display: flex;
     flex-direction: column;
     position: relative;
+    height: 250px;
+    min-width: 200px;
   }
   
   .item img {

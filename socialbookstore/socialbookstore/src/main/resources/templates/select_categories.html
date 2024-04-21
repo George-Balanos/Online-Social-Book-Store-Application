@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendation Page</title>
+    <link rel="stylesheet" href="/css/my_book_offers.css">
+    <script src="https://kit.fontawesome.com/967252b7d1.js" crossorigin="anonymous"></script>
+    <style>
+        /* Add this CSS to style the heart button */
+        .heart-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            top: -10px; /* Adjust top position as needed */
+            right: -10px; /* Adjust right position as needed */
+            color: #ffffff; /* White color */
+            font-size: 24px; /* Adjust font size as needed */
+        }
+        .filled-heart {
+            color: #ff0000; /* Red color for filled heart */
+        }
+    </style>
+</head>
+<body>
+<div class="bg-image"></div>
+<div class="center">
+    <a href="/success" class="home-button"><i class="fas fa-home"></i></a>
+    <div class="container">
+        <div class="item" th:each="category : ${categories}">
+            <form class="deleteForm" th:action="@{/delete_category_by_name}" method="post">
+                <input type="hidden" name="name" th:value="${category.categoryName}" />
+                <button type="submit" class="heart-button"><i class="far fa-heart"></i></button>
+            </form>
+            <img src="/css/pngwing.com.png" alt="Category Image">
+            <h3 th:text="'Category name: '+${category.categoryName}"></h3>
+            <p>Description of the category.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.heart-button').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            const icon = button.querySelector('i');
+            if (icon.classList.contains('far')) {
+                icon.classList.remove('far');
+                icon.classList.add('fas', 'filled-heart');
+            } else {
+                icon.classList.remove('fas', 'filled-heart');
+                icon.classList.add('far');
+            }
+        });
+    });
+</script>
+</body>
+</html>

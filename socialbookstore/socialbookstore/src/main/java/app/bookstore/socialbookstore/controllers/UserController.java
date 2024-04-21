@@ -18,8 +18,12 @@ import app.bookstore.socialbookstore.domain.BookAuthor;
 import app.bookstore.socialbookstore.domain.BookCategory;
 import app.bookstore.socialbookstore.domain.User;
 import app.bookstore.socialbookstore.domain.UserProfile;
+import app.bookstore.socialbookstore.mappers.BookAuthorMapper;
 import app.bookstore.socialbookstore.mappers.BookMapper;
+import app.bookstore.socialbookstore.mappers.UserProfileMapper;
+import app.bookstore.socialbookstore.services.AuthorService;
 import app.bookstore.socialbookstore.services.BookAuthorsService;
+import app.bookstore.socialbookstore.services.BookCategoryService;
 import app.bookstore.socialbookstore.services.BookService;
 import app.bookstore.socialbookstore.services.UserProfileService;
 import app.bookstore.socialbookstore.services.UserService;
@@ -37,6 +41,15 @@ public class UserController {
 	
 	@Autowired
 	BookService bookService;
+	
+	@Autowired
+	AuthorService authorService;
+	
+	@Autowired
+	BookCategoryService bookCategoryService;
+	
+	@Autowired
+	UserProfileMapper userProfileMapper;
 	
 	@RequestMapping("/success")
 	public String getUserHome(Model model) {
@@ -99,6 +112,8 @@ public class UserController {
 		System.out.println(bookCategory);
 		System.out.println(summary);
 		
+		int saveBook = 0;
+		
 		BookCategory category = new BookCategory(bookCategory,null);
 		Book book = new Book(title,null,category);
 		
@@ -128,14 +143,51 @@ public class UserController {
 	        	bookAuthorService.saveBookAuthor(author); 
 	        	System.out.println("Author:" + authorName);
 	        	authors.add(author);
+	        	saveBook = 1;
 	        }   
 	    }
 	    
 	    book.setBookAuthors(authors);
 	    
-	    bookService.saveBook(book);
-		return "redirect:/my_book_offers";
+	    
+	    if(saveBook == 0)
+	    	bookService.saveBook(book);
+		
+	    return "redirect:/my_book_offers";
     }
+	
+	@PostMapping("/delete_book_offer_by_title")
+    public String deleteBookOffer(@RequestParam("title") String title, Model model) {
+        System.out.println("Request received to delete book offer with title: " + title);
+        try {
+            bookService.deleteBookOfferByTitle(title);
+            System.out.println("Book offer deleted successfully");
+            model.addAttribute("successMessage", "Book offer deleted successfully");
+        } catch (Exception e) {
+            System.err.println("Failed to delete book offer: " + e.getMessage());
+            model.addAttribute("errorMessage", "Failed to delete book offer: " + e.getMessage());
+        }
+        return "redirect:/my_book_offers";
+    }
+	
+	
+	@PostMapping("/request_book_offer")
+	public String requestBookOffer(@RequestParam("bookId") int bookId,Model model) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		Optional<User> user = userService.getUser(currentPrincipalName);
+		Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
+		
+		Optional<Book> selectedBook = bookService.getById(bookId);
+		
+		currentUser.get().addBookOffer(selectedBook.get());
+		selectedBook.get().addRequestingUser(currentUser.get());
+		
+		bookService.saveBook(selectedBook.get());
+		
+		return "redirect:/book_offers";
+	}
+	
 	
 	@PostMapping("/updateProfile")
 	public String updateProfile(Model model, @RequestParam(value = "username_profile", required = false) String username, 
@@ -172,4 +224,91 @@ public class UserController {
         }
 	}
 	
+	@RequestMapping("/book_offers")
+    public String showBookOffers(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        System.err.println(currentPrincipalName);
+        Optional<User> user = userService.getUser(currentPrincipalName);
+        Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
+        
+        int myId = currentUser.get().getUserProfileId();
+     
+        
+        List<Book> allBookOffers = userProfileService.getAllBookOffers(myId); 
+        
+        model.addAttribute("allBookOffers",allBookOffers);
+        
+        return "book_offers";
+    }
+	
+	@RequestMapping("/favourites")
+    public String showFavourites(Model model) {
+        
+        return "favourites";
+    }
+    @RequestMapping("/favourite_authors")
+    public String showFavouriteAuthors(Model model) {
+        
+        return "favourite_authors";
+    }
+    @RequestMapping("/favourite_categories")
+    public String showFavouriteCategories(Model model) {
+        
+        return "favourite_categories";
+    }
+
+    @RequestMapping("/show_authors")
+    public String showAuthors(Model model) {
+    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        System.err.println(currentPrincipalName);
+        Optional<User> user = userService.getUser(currentPrincipalName);
+        Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
+        
+        int myId = currentUser.get().getUserProfileId();
+    	
+    	List<String> tempAuthors = userProfileMapper.findOtherBookAuthors(myId);
+    	System.out.println(myId);
+    	
+    	List<BookAuthor> bookAuthors = new ArrayList<>();
+    	
+    	for(String author: tempAuthors) {
+    		bookAuthors.add(bookAuthorService.findByAuthorName(author).get());
+    	}
+    	
+        model.addAttribute("authors", bookAuthors);
+        System.out.println("hereeee");
+        return "select_authors"; 
+    }
+    
+    @RequestMapping("/show_categories")
+    public String showCategories(Model model) {
+        model.addAttribute("categories", bookCategoryService.getAllCategories());
+        System.out.println("hereeee");
+        return "select_categories"; 
+    }
+	
+    
+    @PostMapping("/favourite_author_by_name")
+    public String favouriteBookAuthor(@RequestParam("authorName") String authorName) {
+    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        System.err.println(currentPrincipalName);
+        Optional<User> user = userService.getUser(currentPrincipalName);
+        Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
+        
+        Optional<BookAuthor> selectedBookAuthor = bookAuthorService.findByAuthorName(authorName);
+        
+        int myId = currentUser.get().getUserProfileId();
+        
+        currentUser.get().addFavouriteBookAuthor(selectedBookAuthor.get());
+        
+        userProfileService.saveUserProfile(currentUser.get());
+        
+        System.out.println(userProfileMapper.findOtherBookAuthors(myId));
+        
+    	return "redirect:/show_authors";
+    }
+    
 }

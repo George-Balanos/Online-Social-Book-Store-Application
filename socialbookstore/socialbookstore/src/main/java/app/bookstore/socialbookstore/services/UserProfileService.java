@@ -12,4 +12,5 @@ public interface UserProfileService {
 	public Optional<UserProfile> findUserProfileById(int id);
 	public void saveUserProfile(UserProfile userProfile);
 	public List<Book> getMyBookOffers(int id);
+	public List<Book> getAllBookOffers(int id);
 }

@@ -26,12 +26,32 @@
                 <input type="submit" value="Search">
             </form>
         </header>
-        <div class="sidebar">
-            <a th:href="@{my_book_offers}" class="sidebar-link">My book offers</a>
-            <a href="#" class="sidebar-link">Book offers</a>
-            <a href="#" class="sidebar-link">Favourites</a>
-            <a th:href="@{recommendations}" class="sidebar-link">Recommendations</a>
-            <a th:href="@{edit_profile}" class="sidebar-link">Profile Settings</a>
+        <div class="main-part">
+            <div class="sidebar">
+                <a th:href="@{my_book_offers}" class="sidebar-link">My book offers</a>
+                <a th:href="@{book_offers}" class="sidebar-link">Book offers</a>
+                <a th:href="@{favourites}" class="sidebar-link">Favourites</a>
+                <a th:href="@{recommendations}" class="sidebar-link">Recommendations</a>
+                <a th:href="@{edit_profile}" class="sidebar-link">Profile Settings</a>
+            </div>
+            <div class="sidebar" id="requests">
+                <div class="request">
+                    <div class="request-title">Request1</div>
+                    <div class="wrapper">  
+                        <div class="contact-info">
+                            Email:
+                            <br>
+                            Book id:
+                            <br>
+                            <br>
+                        </div>
+                        <div class="reply">
+                            <button class="accept">A</button>
+                            <button class="decline">B</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <footer>
             <p>&copy; Magic Bookstore<span id="currentYear"> 2024</span></p>

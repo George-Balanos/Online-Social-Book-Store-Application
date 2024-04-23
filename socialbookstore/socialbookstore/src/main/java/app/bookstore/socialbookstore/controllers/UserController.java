@@ -247,11 +247,32 @@ public class UserController {
         
         return "favourites";
     }
-    @RequestMapping("/favourite_authors")
+    
+	@RequestMapping("/favourite_authors")
     public String showFavouriteAuthors(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        System.err.println(currentPrincipalName);
+        Optional<User> user = userService.getUser(currentPrincipalName);
+        Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
+        
+        int myId = currentUser.get().getUserProfileId();
+        
+        List<String> tempAuthors = userProfileMapper.findMyBookAuthors(myId);
+        System.out.println(myId);
+        
+        List<BookAuthor> bookAuthors = new ArrayList<>();
+        
+        for(String author: tempAuthors) {
+            bookAuthors.add(bookAuthorService.findByAuthorName(author).get());
+        }
+        
+        model.addAttribute("authors", bookAuthors);
+        System.out.println("hereeee yoooooooooooo");
         
         return "favourite_authors";
     }
+	
     @RequestMapping("/favourite_categories")
     public String showFavouriteCategories(Model model) {
         
@@ -309,6 +330,23 @@ public class UserController {
         System.out.println(userProfileMapper.findOtherBookAuthors(myId));
         
     	return "redirect:/show_authors";
+    }
+    
+    @PostMapping("/remove_favourite_author")
+    public String removeFavouriteAuhtor(@RequestParam("authorName") String authorName) {
+    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        System.err.println(currentPrincipalName);
+        Optional<User> user = userService.getUser(currentPrincipalName);
+        Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
+        
+        Optional<BookAuthor> selectedBookAuthor = bookAuthorService.findByAuthorName(authorName);
+        
+        int myId = currentUser.get().getUserProfileId();
+        
+        userProfileMapper.removeMyBookAuthors(myId, authorName);
+    	
+    	return "favourite_authors";
     }
     
 }

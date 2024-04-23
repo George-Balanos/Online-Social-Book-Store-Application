@@ -1,9 +1,9 @@
-```<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recommendation Page</title>
+    <title>Favorite Authors Page</title>
     <link rel="stylesheet" href="/css/my_book_offers.css">
     <script src="https://kit.fontawesome.com/967252b7d1.js" crossorigin="anonymous"></script>
     <style>
@@ -21,26 +21,27 @@
     <a href="/success" class="home-button"><i class="fas fa-home"></i></a>
     <div class="container">
         <div class="item">
-            <a th:href="@{show_authors}" class="plus-button"><i class="fas fa-plus"></i></a>
+            <a th:href="@{/show_authors}" class="plus-button"><i class="fas fa-plus"></i></a>
             <h3 class="make-offer">Add your Favourite Author</h3>
             <p>Contribute by making an offer!</p>
         </div>
-        <div class="item" th:each="tempBook : ${myBookOffers}">
-            <form class="deleteForm" th:action="@{/delete_book_offer_by_title}" method="post">
-                <input type="hidden" name="title" th:value="${tempBook.title}" />
-                <button type="submit" class="delete-button"><i class="fas fa-trash-alt"></i></button>
-            </form>
-            <img src="/css/pngwing.com.png" alt="Recommendation 1">
-            <h3 th:text="'Book title: '+${tempBook.title}"></h3>
-            <p>Description of recommendation 1.</p>
-        </div>
+        <div class="item" th:each="author : ${authors}">
+		    <form class="deleteForm" th:action="@{/remove_favourite_author}" method="post">
+		        <input type="hidden" name="authorName" th:value="${author.authorName}" />
+		        <button type="button" class="delete-button"><i class="fas fa-trash-alt"></i></button>
+		    </form>
+		    <img src="/css/pngwing.com.png" alt="Author Image">
+		    <h3 th:text="'Author name: '+${author.authorName}"></h3>
+		    <p>Description of the author.</p>
+		</div>
     </div>
 </div>
 
 <script>
-    document.querySelectorAll('.deleteForm').forEach(form => {
-        form.addEventListener('submit', function(event) {
+    document.querySelectorAll('.delete-button').forEach(button => {
+        button.addEventListener('click', function(event) {
             event.preventDefault();
+            const form = button.closest('.deleteForm');
             const formData = new FormData(form);
             fetch(form.action, {
                 method: 'POST',
@@ -50,7 +51,7 @@
                 if (response.ok) {
                     form.closest('.item').remove(); // Remove the item from the DOM upon successful deletion
                 } else {
-                    console.error('Failed to delete book offer');
+                    console.error('Failed to delete favorite author');
                 }
             })
             .catch(error => {
@@ -59,5 +60,6 @@
         });
     });
 </script>
+
 </body>
-</html>```
+</html>

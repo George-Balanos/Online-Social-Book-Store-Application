@@ -112,10 +112,9 @@ public class UserController {
 		System.out.println(bookCategory);
 		System.out.println(summary);
 		
-		int saveBook = 0;
+		Optional<BookCategory> selectedCategory = bookCategoryService.getCategoryByName(bookCategory);
 		
-		BookCategory category = new BookCategory(bookCategory,null);
-		Book book = new Book(title,null,category);
+		Book book = new Book(title,null,selectedCategory.get());
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -123,6 +122,8 @@ public class UserController {
 		Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
 		
 		book.setBookOwnerId(currentUser.get().getUserProfileId());
+		
+		bookService.saveBook(book);
 
 		// Split bookAuthors by comma
 	    String[] authorNames = bookAuthors.split(",");
@@ -131,27 +132,29 @@ public class UserController {
 	    List<BookAuthor> authors = new ArrayList<>();
 	    for (String authorName : authorNames) {
 	        if(bookAuthorService.isPresent(authorName)) {
+	        	
 	        	System.out.println(bookAuthorService.isPresent(authorName));
+	        	
 	        	bookAuthorService.getByAuthorName(authorName).get().addBook(book);
 	        }else {
 	        	BookAuthor author = new BookAuthor(authorName.trim(),null); // Trim whitespace around author name
 	        	
 	        	List<Book> tempBooks = new ArrayList<>();
 	        	tempBooks.add(book);
+	        	
 	        	author.setBooks(tempBooks);
 	        	
 	        	bookAuthorService.saveBookAuthor(author); 
+	        	
 	        	System.out.println("Author:" + authorName);
+	        	
 	        	authors.add(author);
-	        	saveBook = 1;
 	        }   
 	    }
 	    
 	    book.setBookAuthors(authors);
 	    
-	    
-	    if(saveBook == 0)
-	    	bookService.saveBook(book);
+	    bookService.saveBook(book);
 		
 	    return "redirect:/my_book_offers";
     }

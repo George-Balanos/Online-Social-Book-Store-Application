@@ -27,6 +27,11 @@ public class BookCategory {
 		
 	}
 	
+	public BookCategory(int id, String name) {
+		this.categoryId = id;
+		this.categoryName = name;
+	}
+	
 	public BookCategory() {
 		super();
 	}
@@ -35,13 +40,10 @@ public class BookCategory {
 		return categoryId;
 	}
 
-
-
 	public void setCategoryId(int categoryId) {
 		this.categoryId = categoryId;
 	}
-
-
+	
 
 	public String getCategoryName() {
 		return categoryName;

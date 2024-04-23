@@ -1,6 +1,5 @@
 package app.bookstore.socialbookstore.domain;
 
-import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.*;

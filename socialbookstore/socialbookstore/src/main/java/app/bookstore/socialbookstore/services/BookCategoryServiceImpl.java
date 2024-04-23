@@ -20,14 +20,13 @@ public class BookCategoryServiceImpl implements BookCategoryService {
     }
 
     @Override
-    public Optional<BookCategory> findCategoryById(int id) {
-        return categoryMapper.findById(id);
-    }
-
-
-    @Override
     public void saveCategory(BookCategory category) {
         categoryMapper.save(category);
+    }
+    
+    @Override
+    public Optional<BookCategory> findCategoryById(int id) {
+        return categoryMapper.findById(id);
     }
 
     @Override
@@ -39,4 +38,9 @@ public class BookCategoryServiceImpl implements BookCategoryService {
     public boolean existsCategoryById(int id) {
         return categoryMapper.existsById(id);
     }
+
+	@Override
+	public Optional<BookCategory> getCategoryByName(String name) {
+		return Optional.of(categoryMapper.findByCategoryName(name).get(0));
+	}
 }

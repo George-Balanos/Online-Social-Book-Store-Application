@@ -7,8 +7,9 @@ import app.bookstore.socialbookstore.domain.BookCategory;
 
 public interface BookCategoryService {
 	List<BookCategory> getAllCategories();
-    Optional<BookCategory> findCategoryById(int id);
     void saveCategory(BookCategory category);
+    Optional<BookCategory> findCategoryById(int id);
+    Optional<BookCategory> getCategoryByName(String name);
     void deleteCategoryById(int id);
     boolean existsCategoryById(int id);
 }

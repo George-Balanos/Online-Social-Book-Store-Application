@@ -235,8 +235,12 @@ public class MappersTests {
     public void testDeleteCategory() {
         Optional<BookCategory> bookCategoryOptional = bookCategoryMapper.findById(bookCategory.getCategoryId());
         assertTrue(bookCategoryOptional.isPresent());
+        System.out.println(bookCategoryOptional.get().getCategoryName());
+        
         bookCategoryMapper.delete(bookCategory);
+        
         Optional<BookCategory> savedCategoryOptionalAfterDeletion = bookCategoryMapper.findById(bookCategory.getCategoryId());
+        
         assertTrue(!savedCategoryOptionalAfterDeletion.isPresent());
     }
     

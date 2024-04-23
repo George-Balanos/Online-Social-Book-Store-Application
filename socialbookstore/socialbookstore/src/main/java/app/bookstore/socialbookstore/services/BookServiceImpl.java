@@ -57,4 +57,10 @@ public class BookServiceImpl implements BookService{
 	public Optional<Book> getById(int id) {
 		return bookMapper.findByBookId(id);
 	}
+
+	@Override
+	public void clearDuplicates(Book book) {
+		// TODO Auto-generated method stub
+		
+	}
 }

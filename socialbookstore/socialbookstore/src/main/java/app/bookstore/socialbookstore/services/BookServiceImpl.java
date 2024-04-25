@@ -58,9 +58,19 @@ public class BookServiceImpl implements BookService{
 		return bookMapper.findByBookId(id);
 	}
 
+
 	@Override
-	public void clearDuplicates(Book book) {
-		// TODO Auto-generated method stub
-		
+	public void removeBook(int id) {
+		bookMapper.deleteById(id);
+	}
+
+	@Override
+	public List<Book> getByExactAuthorName(String name) {
+		return bookMapper.findByBookAuthorsAuthorName(name);
+	}
+
+	@Override
+	public List<Book> getByInexactAuthorName(String name) {
+		return bookMapper.findByBookAuthorsAuthorNameContaining(name);
 	}
 }

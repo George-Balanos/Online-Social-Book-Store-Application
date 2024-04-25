@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import app.bookstore.socialbookstore.domain.Book;
-import app.bookstore.socialbookstore.domain.User;
 import app.bookstore.socialbookstore.domain.UserProfile;
 
 public interface UserProfileService {
@@ -13,4 +12,10 @@ public interface UserProfileService {
 	public void saveUserProfile(UserProfile userProfile);
 	public List<Book> getMyBookOffers(int id);
 	public List<Book> getAllBookOffers(int id);
+	public List<String> getUsersRequests(int id);
+	public List<String> getDeclinedUsers(int id, int borrowerId);
+	public void deleteBookRequest(int bookId);
+	public List<String> getClosedRequests(int id);
+	public void deleteSimpleBookRequest(int id, int bookId);
+	public void deleteBookRequestAfterBookOfferWithdraw(int id);
 }

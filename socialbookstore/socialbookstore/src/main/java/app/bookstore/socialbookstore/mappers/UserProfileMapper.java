@@ -33,6 +33,65 @@ public interface UserProfileMapper extends JpaRepository<UserProfile, Integer>{
         nativeQuery = true)
     void removeMyBookAuthors(@Param("myId") int myId, @Param("authorName") String authorName);
 	
+	@Transactional
+    @Modifying
+    @Query(
+        value = "DELETE FROM userprofile_book WHERE book_id = :myId",
+        nativeQuery = true)
+    void removeBookRequest(@Param("myId") int myId);
+	
+	@Query(
+			value = "SELECT category_name FROM book_categories WHERE category_id "
+					+ "NOT IN (SELECT category_id FROM user_profile_book_category WHERE user_profile_id = :myId)",
+			nativeQuery = true)
+	List<String> findOtherBookCategories(@Param("myId") int myId);
+	
+	@Query(
+		    value = "SELECT category_name FROM book_categories WHERE category_id IN"
+		    		+ "(SELECT category_id FROM user_profile_book_category WHERE user_profile_id = :myId)",
+		    nativeQuery = true)
+	List<String> findMyBookCategories(@Param("myId") int myId);
+	
+	@Transactional
+	@Modifying
+	@Query(value = "DELETE upbc " +
+	               "FROM user_profile_book_category upbc " +
+	               "INNER JOIN book_categories bc ON upbc.category_id = bc.category_id " +
+	               "WHERE upbc.user_profile_id = :myId AND bc.category_name = :categoryName",
+	       nativeQuery = true)
+	void removeMyBookCategories(@Param("myId") int myId, @Param("categoryName") String categoryName);
+	
+	@Query(
+            value= "SELECT user_profile_id,books.book_id "
+            	 + "FROM userprofile_book INNER JOIN books on books.book_id = userprofile_book.book_id "
+            	 + "WHERE books.book_owner_id = :id",
+            nativeQuery = true)
+    List<String> getUsersRequests(@Param("id") int id);
+	
+	
+	@Query(
+            value= "SELECT book_id, user_profile_id from userprofile_book where :id = book_id and :borrower_id <> user_profile_id",
+            nativeQuery = true)
+    List<String> findDeclinedUsers(@Param("id") int id, @Param("borrower_id") int borrowerId);
+	
+	@Query(
+            value = "SELECT book_id, status FROM requests WHERE borrower_id = :id",
+            nativeQuery = true)
+    List<String> findClosedRequests(@Param("id") int id);
+	
+	@Transactional
+    @Modifying
+    @Query(value = "DELETE FROM userprofile_book WHERE user_profile_id = :id and book_id = :bookId",
+           nativeQuery = true)
+    void removeSimpleBookRequest(@Param("id") int id, @Param("bookId") int bookId);
+	
+	
+	@Transactional
+    @Modifying
+    @Query(value = "DELETE FROM requests WHERE book_id = :bookId AND book_id not in (SELECT book_id FROM books)",
+           nativeQuery = true)
+    void removeBookRequestAfterWithdrawal(@Param("bookId") int bookId);
+	
 	Optional<UserProfile> findByUsernameProfile(String username);
 	Optional<UserProfile> findByFullName(String fullName);
 	Optional<UserProfile> findByUsernameProfileAndUserProfileId(String username, int userProfileId);

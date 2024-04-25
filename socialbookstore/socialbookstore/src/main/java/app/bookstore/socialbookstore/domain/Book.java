@@ -1,6 +1,6 @@
 package app.bookstore.socialbookstore.domain;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Set;
 
@@ -19,14 +19,24 @@ public class Book {
 	@Column(name="title")
 	private String title;
 	
-	@ManyToMany(mappedBy = "books")
+	
+	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinTable(
+		name = "author_book",
+		joinColumns = @JoinColumn(
+				name = "book_id",referencedColumnName = "book_id"
+		),
+		inverseJoinColumns = @JoinColumn(
+				name = "author_name",referencedColumnName = "author_name")
+	)
 	private List<BookAuthor> bookAuthors;
+	
 	
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name="category_id")
 	private BookCategory bookCategory;
 	
-	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
 	@JoinTable(
 			name = "userprofile_book",
 			joinColumns = @JoinColumn(

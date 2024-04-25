@@ -12,25 +12,37 @@ import jakarta.persistence.Table;
 public class Request {
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-	
-	public int getId() {
-		return id;
-	}
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="id")
+	private int id;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+	@Column(name="book_id")
+	private int bookId;
 
 	@Column(name="borrower_id")
 	private int borrowerId;
 	
-	@Column(name="book_id")
-	private int bookId;
-	
 	@Column(name="status")
 	private int status;
+	
+	private String bookTitle;
+	
+	public Request(int borrowerId,int bookId) {
+		this.borrowerId = borrowerId;
+		this.bookId = bookId;
+	}
+	
+	public Request(int borrowerId,int bookId, int status) {
+		this.borrowerId = borrowerId;
+		this.bookId = bookId;
+		this.status = status;
+	}
+	
+	public Request(int bookId, int status, String title) {
+		this.bookId = bookId;
+		this.bookTitle = title;
+		this.status = status;
+	}
 	
 	public Request() {
 		
@@ -58,5 +70,9 @@ public class Request {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+	
+	public String getBookTitle() {
+		return this.bookTitle;
 	}
 }

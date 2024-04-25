@@ -28,6 +28,7 @@
         <div class="item" th:each="tempBook : ${myBookOffers}">
             <form class="deleteForm" th:action="@{/delete_book_offer_by_title}" method="post">
                 <input type="hidden" name="title" th:value="${tempBook.title}" />
+                <input type="hidden" name="bookId" th:value="${tempBook.bookId}" />
                 <button type="submit" class="delete-button"><i class="fas fa-trash-alt"></i></button>
             </form>
             <img src="/css/pngwing.com.png" alt="Recommendation 1">

@@ -21,17 +21,18 @@
     <a href="/success" class="home-button"><i class="fas fa-home"></i></a>
     <div class="container">
         <div class="item">
-            <a th:href="@{show_categories}" class="plus-button"><i class="fas fa-plus"></i></a>
+            <a th:href="@{/show_categories}" class="plus-button"><i class="fas fa-plus"></i></a>
             <h3 class="make-offer">Add your Favourite Category</h3>
             <p>Contribute by making an offer!</p>
         </div>
-        <div class="item" th:each="tempBook : ${myBookOffers}">
-            <form class="deleteForm" th:action="@{/delete_book_offer_by_title}" method="post">
-                <input type="hidden" name="title" th:value="${tempBook.title}" />
+        <div class="item" th:each="tempCategory : ${categories}">
+            <form class="deleteForm" th:action="@{/remove_favourite_category}" method="post">
+                <input type="hidden" name="categoryName" th:value="${tempCategory.categoryName}" />
+                <input type="hidden" name="categoryId" th:value="${tempCategory.categoryId}" />
                 <button type="submit" class="delete-button"><i class="fas fa-trash-alt"></i></button>
             </form>
             <img src="/css/pngwing.com.png" alt="Recommendation 1">
-            <h3 th:text="'Book title: '+${tempBook.title}"></h3>
+            <h3 th:text="'Book title: '+${tempCategory.categoryName}"></h3>
             <p>Description of recommendation 1.</p>
         </div>
     </div>

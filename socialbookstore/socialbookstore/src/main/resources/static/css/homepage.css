@@ -167,8 +167,10 @@ input[type="submit"]:hover {
 
     display: flex;
     flex-direction: column;
-    
-    
+}
+
+#requests::-webkit-scrollbar {
+  display: none;
 }
 
 .sidebar#requests{
@@ -231,7 +233,7 @@ input[type="submit"]:hover {
 
 
 .reply{
-    background-color: white;
+    background-color: none;
 
     height: 0;
 
@@ -253,4 +255,126 @@ input[type="submit"]:hover {
 .wrapper{
     display: flex;
     flex-direction: row;
+}
+
+button{
+	background: none;
+	margin: 3px;
+	padding: 10px;
+	
+    border: none;
+    
+    transition: transform linear 0.3s;
+}
+
+button:hover {
+	box-shadow: 0px 0px 5px white;
+	transform: translateY(-5px);
+}
+
+button:active {
+	transform: translateY(1px);
+}
+
+.accept{
+	background: #28a745; 
+    border-radius: 5px;
+    color: white;
+}
+
+.decline{
+	background: #dc3545; 
+    border-radius: 5px;
+    color: white;
+}
+
+.reply form{
+	display: flex;
+	flex-direction: col;
+}
+
+.left-sidebar{
+    display: flex;
+    flex-direction: row;
+}
+
+.inbox-info{
+    background-color: rgba(255, 255, 255, 0.05); /* Semi-transparent white */
+    backdrop-filter: blur(5px); /* Add a blur effect */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    color: white;
+
+    padding: 10px;
+    border-radius: 10px;
+
+    box-shadow: 0px 0px 15px var(--main-color);
+
+    position: relative;
+    top: 70px;
+
+    margin-left: 10px;
+
+    height: fit-content;
+    width: 150px;
+    
+    overflow-y: scroll;
+    
+	max-height: 400px;
+	min-width: max-content;
+}
+
+.inbox-info::-webkit-scrollbar {
+  display: none;
+}
+
+.dropdown {
+    visibility: hidden;
+    transform: translateX(50%); /* Start off-screen to the left */
+    transition: opacity 0.3s ease, transform 0.3s ease; /* Add transition for opacity and transform */
+    
+    
+}
+
+.dropdown.visible {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(0); /* Move to the original position */
+}
+
+
+.dropdowns{
+	display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.dropdowns select {
+    border: none; /* Remove border */
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px; /* Added padding */
+    box-sizing: border-box;
+    background-color: #3f3949; /* Background color */
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Transition for background color */
+    position: relative; /* Added position */
+    left: -45px; /* Adjusted left position */
+}
+
+
+.dropdowns select:hover,
+.dropdowns select:focus {
+    background-color: #5f5f5f; /* Background color on hover/focus */
+}
+
+.dropdowns select option {
+    background-color: #5f5f5f; /* Option background color */
+    color: white;
+    font-size: 16px;
+}
+
+.dropdowns select option:hover {
+    background-color: #333; /* Darkened option background color on hover */
 }

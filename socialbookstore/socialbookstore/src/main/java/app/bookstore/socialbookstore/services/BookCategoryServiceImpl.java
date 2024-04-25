@@ -41,6 +41,6 @@ public class BookCategoryServiceImpl implements BookCategoryService {
 
 	@Override
 	public Optional<BookCategory> getCategoryByName(String name) {
-		return Optional.of(categoryMapper.findByCategoryName(name).get(0));
+		return categoryMapper.findByCategoryName(name);
 	}
 }

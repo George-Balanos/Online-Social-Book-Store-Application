@@ -59,4 +59,34 @@ public class UserProfileImpl implements UserProfileService{
         return otherBooks;
 	}
 
+	@Override
+    public List<String> getUsersRequests(int id) {
+
+        return userProfileMapper.getUsersRequests(id);
+    }
+
+	@Override
+	public List<String> getDeclinedUsers(int id, int borrowerId) {
+		return userProfileMapper.findDeclinedUsers(id, borrowerId);
+	}
+
+	@Override
+	public void deleteBookRequest(int bookId) {
+		userProfileMapper.removeBookRequest(bookId);
+	}
+
+	@Override
+    public List<String> getClosedRequests(int id) {
+        return userProfileMapper.findClosedRequests(id);
+    }
+
+	@Override
+    public void deleteSimpleBookRequest(int id, int bookId) {
+        userProfileMapper.removeSimpleBookRequest(id, bookId);
+    }
+
+	@Override
+	public void deleteBookRequestAfterBookOfferWithdraw(int id) {
+		userProfileMapper.removeBookRequestAfterWithdrawal(id);
+	}
 }

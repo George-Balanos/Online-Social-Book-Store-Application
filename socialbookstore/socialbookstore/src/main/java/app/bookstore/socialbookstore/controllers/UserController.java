@@ -16,15 +16,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import app.bookstore.socialbookstore.domain.Book;
 import app.bookstore.socialbookstore.domain.BookAuthor;
 import app.bookstore.socialbookstore.domain.BookCategory;
+import app.bookstore.socialbookstore.domain.Request;
 import app.bookstore.socialbookstore.domain.User;
 import app.bookstore.socialbookstore.domain.UserProfile;
-import app.bookstore.socialbookstore.mappers.BookAuthorMapper;
-import app.bookstore.socialbookstore.mappers.BookMapper;
 import app.bookstore.socialbookstore.mappers.UserProfileMapper;
 import app.bookstore.socialbookstore.services.AuthorService;
 import app.bookstore.socialbookstore.services.BookAuthorsService;
 import app.bookstore.socialbookstore.services.BookCategoryService;
 import app.bookstore.socialbookstore.services.BookService;
+import app.bookstore.socialbookstore.services.RequestService;
 import app.bookstore.socialbookstore.services.UserProfileService;
 import app.bookstore.socialbookstore.services.UserService;
 
@@ -51,6 +51,9 @@ public class UserController {
 	@Autowired
 	UserProfileMapper userProfileMapper;
 	
+	@Autowired
+	RequestService requestService;
+	
 	@RequestMapping("/success")
 	public String getUserHome(Model model) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -62,7 +65,108 @@ public class UserController {
 		Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
 		model.addAttribute("currentUser",currentUser);
 		
+		List<String> usersReq = userProfileMapper.getUsersRequests(user.get().getUserId());
+		
+		List<Request> requestList = new ArrayList<>();
+		
+        System.out.println("Size of users requests: " + usersReq.size());
+        //System.out.println("Id of users requests: " + usersReq.get(1));
+        for (String id : usersReq) {
+        	
+        	String[] temp = id.split(",");
+        	
+        	try {
+        		
+                Integer userId = Integer.parseInt(temp[0].trim()); 
+                Integer bookId = Integer.parseInt(temp[1].trim()); 
+                
+                System.out.println("Requester id: " + userId);
+                Optional<UserProfile> tmp = userProfileMapper.findByUserProfileId(userId);
+                
+                if (tmp.isPresent()) {
+                	
+                    Request newRequest = new Request(userId,bookId);
+                    requestList.add(newRequest);
+                    
+                } else {
+                	
+                    System.out.println("User with id " + userId + " not found.");
+                    
+                }
+                
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid user id: " + id);
+            }
+        }
+        
+        System.out.println(requestList.size());
+        
+        model.addAttribute("requestingUsers", requestList);
+        
+        List<String> closedRequests = userProfileService.getClosedRequests(user.get().getUserId());
+        
+        List<Request> myResponses = new ArrayList<>();
+        
+        System.out.println(myResponses.size());
+        
+        for(String request: closedRequests) {
+        	String[] tempRequest = request.split(",");
+        	
+        	Integer bookId = Integer.parseInt(tempRequest[0].trim());
+        	String bookTitle = bookService.getById(bookId).get().getTitle();
+        	
+        	Integer status = Integer.parseInt(tempRequest[1].trim());
+        	
+        	Request newRequest = new Request(bookId,status,bookTitle);
+        	myResponses.add(newRequest);
+        }
+        
+        model.addAttribute("myResponses",myResponses);
+        
+        
 		return "/dashboard";
+	}
+	
+	@PostMapping("/search")
+	public String search() {
+	
+		return "search_results";
+		
+	}
+	
+	@PostMapping("accept_request")
+	public String acceptRequest(@RequestParam("bookId") Integer bookId,
+								@RequestParam("borrowerId") Integer borrowerId) {
+		
+		System.out.println("Accept button clicked for Book ID: " + bookId + ", Borrower ID: " + borrowerId);
+		
+		Request newRequest = new Request(borrowerId,bookId,1);
+		requestService.saveRequest(newRequest);
+		
+		List<String> declinedUser = userProfileService.getDeclinedUsers(bookId, borrowerId);
+		for(String user: declinedUser) {
+			System.out.println(user);
+			
+			String[] tempUser = user.split(",");
+			
+			Integer tempBookId = Integer.parseInt(tempUser[0].trim()); 
+			Integer tempUserId = Integer.parseInt(tempUser[1].trim()); 
+			
+			newRequest = new Request(tempUserId,tempBookId,0);
+			
+		}
+		
+		requestService.saveRequest(newRequest);
+		
+		bookService.getById(bookId).get().setBookOwnerId(borrowerId);
+        bookService.saveBook(bookService.getById(bookId).get());
+		
+		
+		userProfileService.deleteBookRequest(bookId);
+		
+        System.out.println("Declined users size: " + declinedUser.size());
+		
+		return "redirect:/success";
 	}
 	
 	@RequestMapping("/success/showInfo")
@@ -160,16 +264,20 @@ public class UserController {
     }
 	
 	@PostMapping("/delete_book_offer_by_title")
-    public String deleteBookOffer(@RequestParam("title") String title, Model model) {
+    public String deleteBookOffer(@RequestParam("title") String title,@RequestParam("bookId") int bookId, Model model) {
         System.out.println("Request received to delete book offer with title: " + title);
+        
         try {
-            bookService.deleteBookOfferByTitle(title);
+            bookService.removeBook(bookId);
             System.out.println("Book offer deleted successfully");
             model.addAttribute("successMessage", "Book offer deleted successfully");
         } catch (Exception e) {
             System.err.println("Failed to delete book offer: " + e.getMessage());
             model.addAttribute("errorMessage", "Failed to delete book offer: " + e.getMessage());
         }
+        
+        userProfileService.deleteBookRequestAfterBookOfferWithdraw(bookId);
+        
         return "redirect:/my_book_offers";
     }
 	
@@ -305,13 +413,6 @@ public class UserController {
         System.out.println("hereeee");
         return "select_authors"; 
     }
-    
-    @RequestMapping("/show_categories")
-    public String showCategories(Model model) {
-        model.addAttribute("categories", bookCategoryService.getAllCategories());
-        System.out.println("hereeee");
-        return "select_categories"; 
-    }
 	
     
     @PostMapping("/favourite_author_by_name")
@@ -335,6 +436,42 @@ public class UserController {
     	return "redirect:/show_authors";
     }
     
+    @PostMapping("/favourite_category_by_name")
+    public String favouriteBookCategory(@RequestParam("categoryName") String categoryName) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        System.err.println(currentPrincipalName);
+        Optional<User> user = userService.getUser(currentPrincipalName);
+        Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
+        
+        Optional<BookCategory> selectedBookCategory = bookCategoryService.getCategoryByName(categoryName);
+        
+        int myId = currentUser.get().getUserProfileId();
+        
+        currentUser.get().addFavouriteBookCategory(selectedBookCategory.get());
+        
+        userProfileService.saveUserProfile(currentUser.get());
+        
+        System.out.println(userProfileMapper.findOtherBookCategories(myId));
+        
+        return "redirect:/show_categories";
+    }
+    
+    @PostMapping("/remove_favourite_category")
+    public String removeFavouriteCategory(@RequestParam("categoryName") String categoryName) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        System.err.println(currentPrincipalName);
+        Optional<User> user = userService.getUser(currentPrincipalName);
+        Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
+        
+        int myId = currentUser.get().getUserProfileId();
+        
+        userProfileMapper.removeMyBookCategories(myId, categoryName);
+        
+        return "favourite_categories";
+    }
+    
     @PostMapping("/remove_favourite_author")
     public String removeFavouriteAuhtor(@RequestParam("authorName") String authorName) {
     	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -350,6 +487,42 @@ public class UserController {
         userProfileMapper.removeMyBookAuthors(myId, authorName);
     	
     	return "favourite_authors";
+    }
+    
+    @RequestMapping("/show_categories")
+    public String showCategories(Model model) {
+        model.addAttribute("categories", bookCategoryService.getAllCategories());
+        System.out.println("hereeee");
+        
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        System.err.println(currentPrincipalName);
+        Optional<User> user = userService.getUser(currentPrincipalName);
+        Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
+        
+        int myId = currentUser.get().getUserProfileId();
+        
+        List<String> tempCategories = userProfileMapper.findOtherBookCategories(myId);
+        System.out.println(myId);
+        
+        List<BookCategory> bookCategories = new ArrayList<>();
+        
+        for(String category: tempCategories) {
+            bookCategories.add(bookCategoryService.getCategoryByName(category).get());
+        }
+        
+        model.addAttribute("categories", bookCategories);
+        System.out.println("hereeeeyoooo");
+        
+        return "select_categories"; 
+    }
+    
+    @PostMapping("/decline_request")
+    public String declineRequest(@RequestParam("borrowerId") int borrowerId, @RequestParam("bookId") int bookId) {
+        userProfileService.deleteSimpleBookRequest(borrowerId, bookId);
+        Request newRequest = new Request(borrowerId, bookId,0);
+        requestService.saveRequest(newRequest);
+        return "redirect:/success";
     }
     
 }

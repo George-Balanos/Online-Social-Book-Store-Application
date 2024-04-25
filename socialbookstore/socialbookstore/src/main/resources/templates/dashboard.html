@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage</title>
     <link rel="stylesheet" href="/css/homepage.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+    .styled-text {
+      font-family: Copperplate, Papyrus, fantasy;
+      font-size: 50px;
+    }
+  </style>
 </head>
 <body>
     <div class="container">
@@ -20,34 +27,76 @@
                     <button type="submit">Log Out</button>
                 </form>
             </div>
-            <h1>Homepage</h1>
-            <form action="#" method="GET">
-                <input type="text" name="search" placeholder="Search...">
-                <input type="submit" value="Search">
-            </form>
+            <p><span class="styled-text">Magic Bookstore</span></p>
+            
+            <input type="text" name="search" placeholder="Search...">
+            <div class="dropdowns">
+	            <form th:action="@{/search}" method="post">
+	                <button>Exact Author</button>
+	            </form>
+	            <form th:action="@{/search}" method="post">
+	                <button>Exact Author</button>
+	            </form>
+	            <form th:action="@{/search}" method="post">
+	                <button>Exact Author</button>
+	            </form>
+	            <form th:action="@{/search}" method="post">
+	                <button>Exact Author</button>
+	            </form>
+	            <form th:action="@{/search}" method="post">
+	                <button>Exact Author</button>
+	            </form>
+	            <form th:action="@{/search}" method="post">
+	                <button>Exact Author</button>
+	            </form>
+	        </div>
+           
         </header>
         <div class="main-part">
-            <div class="sidebar">
-                <a th:href="@{my_book_offers}" class="sidebar-link">My book offers</a>
-                <a th:href="@{book_offers}" class="sidebar-link">Book offers</a>
-                <a th:href="@{favourites}" class="sidebar-link">Favourites</a>
-                <a th:href="@{recommendations}" class="sidebar-link">Recommendations</a>
-                <a th:href="@{edit_profile}" class="sidebar-link">Profile Settings</a>
-            </div>
+        	<div class="left-sidebar">
+	            <div class="sidebar">
+	            	<a class="sidebar-link" id="inbox"><i class="fas fa-inbox"></i></a>
+	                <a th:href="@{my_book_offers}" class="sidebar-link">My book offers</a>
+	                <a th:href="@{book_offers}" class="sidebar-link">Book offers</a>
+	                <a th:href="@{favourites}" class="sidebar-link">Favourites</a>
+	                <a th:href="@{recommendations}" class="sidebar-link">Recommendations</a>
+	                <a th:href="@{edit_profile}" class="sidebar-link">Profile Settings</a>
+	            </div>
+	            <div class="dropdown">  
+
+                    <div class="inbox-info">
+                        <p th:each="tempResponse: ${myResponses}">
+					        <span th:text="${tempResponse.getBookTitle() + ': '}" ></span>
+					        <!-- Append accepted/rejected text with inline style -->
+					        <span th:text="${tempResponse.status == 1 ? 'Accepted' : 'Rejected'}" 
+					              th:style="${tempResponse.status == 1} ? 'color: green;' : 'color: red;'"></span>
+					    </p>
+                    </div>
+
+                </div>
+	        </div>
             <div class="sidebar" id="requests">
-                <div class="request">
-                    <div class="request-title">Request1</div>
+                <div class="request" th:each="tempRequest, requestIndex : ${requestingUsers}">
+                    <div class="request-title">Request <span th:text="${requestIndex.index + 1}"></span></div>
                     <div class="wrapper">  
                         <div class="contact-info">
                             Email:
                             <br>
-                            Book id:
+                            <p th:text="${'UserId: '+tempRequest.getBorrowerId()}"></p>
                             <br>
                             <br>
                         </div>
                         <div class="reply">
-                            <button class="accept">A</button>
-                            <button class="decline">B</button>
+                        	<form th:action="@{/accept_request}" method="post">
+						        <input type="hidden" name="bookId" th:value="${tempRequest.bookId}" />
+						        <input type="hidden" name="borrowerId" th:value="${tempRequest.borrowerId}" />
+						        <button type="submit" class="accept"><i class="fas fa-check fa-fw"></i></button>
+						    </form>
+						    <form th:action="@{/decline_request}" method="post">
+						        <input type="hidden" name="bookId" th:value="${tempRequest.bookId}" />
+						        <input type="hidden" name="borrowerId" th:value="${tempRequest.borrowerId}" />
+						        <button type="submit" class="decline"><i class="fas fa-times fa-fw"></i></button>
+						    </form>
                         </div>
                     </div>
                 </div>
@@ -58,5 +107,31 @@
             <br>
         </footer>
     </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var inboxLink = document.getElementById("inbox");
+            var dropdown = document.querySelector(".dropdown");
+
+            inboxLink.addEventListener("click", function() {
+                event.preventDefault();
+                dropdown.classList.toggle("visible");
+            });
+            
+            // Form submission validation
+             var searchButton = document.querySelector("input[type='submit']");
+
+            searchButton.addEventListener("click", function(event) {
+                var searchOption1 = document.querySelector("select[name='searchOption1']");
+                var searchOption2 = document.querySelector("select[name='searchOption2']");
+
+                if (!searchOption1.value || !searchOption2.value) {
+                    window.alert("Please select both search options.");
+                    event.preventDefault(); // Prevent form submission
+                }
+            });
+
+        });
+    </script>
 </body>
 </html>

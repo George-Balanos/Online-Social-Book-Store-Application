@@ -2,6 +2,9 @@ package app.bookstore.socialbookstore.domain;
 
 import java.util.List;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.*;
 
 @Entity 
@@ -10,17 +13,9 @@ public class BookAuthor {
 	
 	@Id
 	@Column(name = "author_name")
-	private String authorName; //name
+	private String authorName; 
 	
-	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinTable(
-		name = "author_book",
-		joinColumns = @JoinColumn(
-				name = "author_name",referencedColumnName = "author_name"
-		),
-		inverseJoinColumns = @JoinColumn(
-				name = "book_id",referencedColumnName = "book_id")
-	)
+	@ManyToMany(mappedBy = "bookAuthors")
 	private List<Book> books;
 	
 	public BookAuthor(String name, List<Book> books) {
@@ -36,8 +31,6 @@ public class BookAuthor {
 	public String getAuthorName() {
 		return authorName;
 	}
-
-
 
 	public void setAuthorName(String authorName) {
 		this.authorName = authorName;

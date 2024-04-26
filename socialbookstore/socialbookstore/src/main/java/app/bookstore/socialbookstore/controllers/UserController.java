@@ -20,6 +20,15 @@ import app.bookstore.socialbookstore.domain.Request;
 import app.bookstore.socialbookstore.domain.User;
 import app.bookstore.socialbookstore.domain.UserProfile;
 import app.bookstore.socialbookstore.mappers.UserProfileMapper;
+import app.bookstore.socialbookstore.recommendationstrategy.FavouriteBookAuthorsStrategy;
+import app.bookstore.socialbookstore.recommendationstrategy.RecommendationEngine;
+import app.bookstore.socialbookstore.recommendationstrategy.RecommendationEngineStrategy;
+import app.bookstore.socialbookstore.searchstrategy.BookAuthorExactStrategy;
+import app.bookstore.socialbookstore.searchstrategy.BookAuthorInexactStrategy;
+import app.bookstore.socialbookstore.searchstrategy.BookTitleExactStrategy;
+import app.bookstore.socialbookstore.searchstrategy.BookTitleInexactStrategy;
+import app.bookstore.socialbookstore.searchstrategy.SearchEngine;
+import app.bookstore.socialbookstore.searchstrategy.SearchEngineStrategy;
 import app.bookstore.socialbookstore.services.AuthorService;
 import app.bookstore.socialbookstore.services.BookAuthorsService;
 import app.bookstore.socialbookstore.services.BookCategoryService;
@@ -53,6 +62,12 @@ public class UserController {
 	
 	@Autowired
 	RequestService requestService;
+	
+	private SearchEngine searchEngine = new SearchEngine();
+	private SearchEngineStrategy searchEngineStrategy;
+	
+	private RecommendationEngine recommendationEngine = new RecommendationEngine();
+	private RecommendationEngineStrategy recommendationEngineStrategy;
 	
 	@RequestMapping("/success")
 	public String getUserHome(Model model) {
@@ -127,9 +142,90 @@ public class UserController {
 		return "/dashboard";
 	}
 	
-	@PostMapping("/search")
-	public String search() {
+	@PostMapping("/search_exact_author")
+	public String searchExactAuthor(Model model, @RequestParam("search") String query) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		System.err.println(currentPrincipalName);
+		
+		Optional<User> user = userService.getUser(currentPrincipalName);
+		
+		Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
+		
+		searchEngineStrategy = new BookAuthorExactStrategy();
+		searchEngine.configureSearchEngine(searchEngineStrategy);
+		
+		List<Book> matchedBooks = searchEngine.doSearch(query,bookService);
+		
+		model.addAttribute("matchedBooks",matchedBooks);
+		model.addAttribute("currentUserId",currentUser.get().getUserProfileId());
+		
+		return "search_results";
+		
+	}
 	
+	@PostMapping("/search_inexact_author")
+	public String searchInexactAuthor(Model model, @RequestParam("search") String query) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		System.err.println(currentPrincipalName);
+		
+		Optional<User> user = userService.getUser(currentPrincipalName);
+		
+		Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
+		
+		searchEngineStrategy = new BookAuthorInexactStrategy();
+		searchEngine.configureSearchEngine(searchEngineStrategy);
+		
+		List<Book> matchedBooks = searchEngine.doSearch(query,bookService);
+		
+		model.addAttribute("matchedBooks",matchedBooks);
+		model.addAttribute("currentUserId",currentUser.get().getUserProfileId());
+		
+		return "search_results";
+		
+	}
+	
+	@PostMapping("/search_exact_title")
+	public String searchExactTitle(Model model, @RequestParam("search") String query) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		System.err.println(currentPrincipalName);
+		
+		Optional<User> user = userService.getUser(currentPrincipalName);
+		
+		Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
+		
+		searchEngineStrategy = new BookTitleExactStrategy();
+		searchEngine.configureSearchEngine(searchEngineStrategy);
+		
+		List<Book> matchedBooks = searchEngine.doSearch(query,bookService);
+		
+		model.addAttribute("matchedBooks",matchedBooks);
+		model.addAttribute("currentUserId",currentUser.get().getUserProfileId());
+		
+		return "search_results";
+		
+	}
+	
+	@PostMapping("/search_inexact_title")
+	public String searchInexactTitle(Model model, @RequestParam("search") String query) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		System.err.println(currentPrincipalName);
+		
+		Optional<User> user = userService.getUser(currentPrincipalName);
+		
+		Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
+		
+		searchEngineStrategy = new BookTitleInexactStrategy();
+		searchEngine.configureSearchEngine(searchEngineStrategy);
+		
+		List<Book> matchedBooks = searchEngine.doSearch(query,bookService);
+		
+		model.addAttribute("matchedBooks",matchedBooks);
+		model.addAttribute("currentUserId",currentUser.get().getUserProfileId());
+		
 		return "search_results";
 		
 	}
@@ -179,8 +275,30 @@ public class UserController {
 		return "edit_profile";
 	}
 	
-	@RequestMapping("/recommendations")
-    public String showRecommendations(Model model) {
+	@RequestMapping("/recommendations_authors")
+    public String showRecommendationsByAuthor(Model model) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		System.err.println(currentPrincipalName);
+		
+		Optional<User> user = userService.getUser(currentPrincipalName);
+		
+		Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
+		
+		recommendationEngineStrategy = new FavouriteBookAuthorsStrategy();
+		recommendationEngine.configureRecommendationEngine(recommendationEngineStrategy);
+		
+		List<Integer> recommended = recommendationEngine.recommend(currentUser.get().getUserProfileId(), bookService);
+		
+		List<Book> recommendedBooks = new ArrayList<>();
+		
+		for(Integer elem: recommended) {
+			recommendedBooks.add(bookService.getById(elem).get());
+		}
+		
+		model.addAttribute("recommendedBooks",recommendedBooks);
+		model.addAttribute("currentUserId",currentUser.get().getUserProfileId());
+		
         return "Recommendations";
     }  
 	

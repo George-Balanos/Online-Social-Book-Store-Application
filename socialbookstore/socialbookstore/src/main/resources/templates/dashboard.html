@@ -29,27 +29,16 @@
             </div>
             <p><span class="styled-text">Magic Bookstore</span></p>
             
-            <input type="text" name="search" placeholder="Search...">
-            <div class="dropdowns">
-	            <form th:action="@{/search}" method="post">
-	                <button>Exact Author</button>
-	            </form>
-	            <form th:action="@{/search}" method="post">
-	                <button>Exact Author</button>
-	            </form>
-	            <form th:action="@{/search}" method="post">
-	                <button>Exact Author</button>
-	            </form>
-	            <form th:action="@{/search}" method="post">
-	                <button>Exact Author</button>
-	            </form>
-	            <form th:action="@{/search}" method="post">
-	                <button>Exact Author</button>
-	            </form>
-	            <form th:action="@{/search}" method="post">
-	                <button>Exact Author</button>
-	            </form>
-	        </div>
+            <form id="searchForm" method="post" th:action="@{/search}">
+			    <input id="searchInput" type="text" name="search" placeholder="Search..." th:value="${searchInput}" />
+			    <div class="dropdowns">
+			        <button type="submit" th:formaction="@{/search_exact_author}" name="query">Exact Author</button>
+			        <button type="submit" th:formaction="@{/search_inexact_author}" name="query">Inexact Author</button>
+			        <button type="submit" th:formaction="@{/search_exact_title}" name="query">Exact Title</button>
+			        <button type="submit" th:formaction="@{/search_inexact_title}" name="query">Inexact Title</button>
+			        <!-- Add more buttons with different th:formaction attributes as needed -->
+			    </div>
+			</form>
            
         </header>
         <div class="main-part">
@@ -59,7 +48,7 @@
 	                <a th:href="@{my_book_offers}" class="sidebar-link">My book offers</a>
 	                <a th:href="@{book_offers}" class="sidebar-link">Book offers</a>
 	                <a th:href="@{favourites}" class="sidebar-link">Favourites</a>
-	                <a th:href="@{recommendations}" class="sidebar-link">Recommendations</a>
+	                <a th:href="@{recommendations_authors}" class="sidebar-link">Recommendations</a>
 	                <a th:href="@{edit_profile}" class="sidebar-link">Profile Settings</a>
 	            </div>
 	            <div class="dropdown">  

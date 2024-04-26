@@ -20,6 +20,7 @@ public class BookServiceImpl implements BookService{
 	
 	@Autowired
 	BookAuthorMapper bookAuthorMapper;
+
 	
 	@Override
 	public void saveBook(Book book) {
@@ -72,5 +73,21 @@ public class BookServiceImpl implements BookService{
 	@Override
 	public List<Book> getByInexactAuthorName(String name) {
 		return bookMapper.findByBookAuthorsAuthorNameContaining(name);
+	}
+
+	@Override
+	public List<Book> getByInexactTitle(String title) {
+		return bookMapper.findByTitleContaining(title);
+	}
+
+	@Override
+	public List<Integer> getByFavouriteAuthors(int userId) {
+		return bookAuthorMapper.findByFavouriteAuthors(userId);
+	}
+
+	@Override
+	public List<Book> getByFavouriteCategory(int userId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

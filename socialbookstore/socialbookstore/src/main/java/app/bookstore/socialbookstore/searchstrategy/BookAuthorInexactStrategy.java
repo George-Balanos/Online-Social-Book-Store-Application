@@ -8,11 +8,9 @@ import app.bookstore.socialbookstore.domain.Book;
 import app.bookstore.socialbookstore.services.BookService;
 
 public class BookAuthorInexactStrategy implements SearchEngineStrategy{
-	@Autowired
-	BookService bookService;
-
+	
 	@Override
-	public List<Book> executeSearch(String query) {
+	public List<Book> executeSearch(String query,BookService bookService) {
 	
 		return bookService.getByInexactAuthorName(query);
 		

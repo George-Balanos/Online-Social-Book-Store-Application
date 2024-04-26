@@ -14,15 +14,16 @@ import app.bookstore.socialbookstore.domain.Book;
 public interface BookMapper extends JpaRepository<Book, Integer>{
 	
 	List<Book> findByTitle(String title);	//Exact query.
+	@Query("SELECT b FROM Book b WHERE b.title LIKE %:title%")
 	List<Book> findByTitleContaining(String title);	//Inexact query.
+	
 	List<Book> findByBookOwnerId(int id);
 	Optional<Book> findByBookId(int id);
 	void deleteByBookId(int id);
 	
-	
-	
 	List<Book> findByBookAuthorsAuthorName(String authorName); //Exact query
-	
 	@Query("SELECT b FROM Book b JOIN b.bookAuthors ba WHERE ba.authorName LIKE %:authorName%")
 	List<Book> findByBookAuthorsAuthorNameContaining(String authorName); //Inexact query
+	
+	
 } 

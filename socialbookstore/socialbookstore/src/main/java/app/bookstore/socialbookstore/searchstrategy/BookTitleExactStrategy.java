@@ -5,13 +5,11 @@ import java.util.List;
 import app.bookstore.socialbookstore.domain.Book;
 import app.bookstore.socialbookstore.services.BookService;
 
-public class BookAuthorExactStrategy implements SearchEngineStrategy{
+public class BookTitleExactStrategy implements SearchEngineStrategy{
 
 	@Override
-	public List<Book> executeSearch(String query,BookService bookService) {
-	
-		return bookService.getByExactAuthorName(query);
-		
+	public List<Book> executeSearch(String query, BookService bookService) {
+		return bookService.getByTitle(query);
 	}
 
 }

@@ -26,14 +26,17 @@
             <p>Contribute by making an offer!</p>
         </div>
         <div class="item" th:each="tempBook : ${myBookOffers}">
+        	<h3 id="book_title" th:text="'Book title: '+${tempBook.title}"></h3>
+        	<h5 id="book_category" th:text="'Book category: '+${tempBook.getBookCategory().getCategoryName()}"></h5>
+        	<img src="/css/pngwing.com.png" alt="Recommendation 1">
             <form class="deleteForm" th:action="@{/delete_book_offer_by_title}" method="post">
                 <input type="hidden" name="title" th:value="${tempBook.title}" />
                 <input type="hidden" name="bookId" th:value="${tempBook.bookId}" />
                 <button type="submit" class="delete-button"><i class="fas fa-trash-alt"></i></button>
             </form>
-            <img src="/css/pngwing.com.png" alt="Recommendation 1">
-            <h3 th:text="'Book title: '+${tempBook.title}"></h3>
-            <p>Description of recommendation 1.</p>
+            <div id="summary">
+            	<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ea, magnam veritatis fugiat voluptatum, vitae nemo dolores dolore nulla laudantium qui unde natus eaque. Autem doloremque commodi rerum nisi, numquam neque.</p>
+            </div>
         </div>
     </div>
 </div>

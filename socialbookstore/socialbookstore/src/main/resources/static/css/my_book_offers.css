@@ -2,9 +2,9 @@ body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-  }
-  
-  .bg-image {
+}
+
+.bg-image {
     position: fixed;
     top: 0;
     left: 0;
@@ -14,71 +14,72 @@ body {
     background-size: cover;
     background-position: center;
     z-index: -1; /* Ensure it's behind other content */
-  }
-  
-  .center {
+}
+
+.center {
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
-  }
-  
-  .home-button {
+}
+
+.home-button {
     position: absolute;
     top: 30px;
     left: 50px;
     color: #45a049;
     text-decoration: none;
     font-size: 44px;
-  }
-  
-  .container {
+}
+
+.container {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-gap: 30px;
     padding: 20px;
-  }
-  
-  .item {
-    /* Add glassmorphism effect */
-    background-color: rgba(255, 255, 255, 0.15); /* Transparent white */
-    border-radius: 10px; /* Rounded corners */
-    padding: 10px;
+}
+
+.item {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding-top: 0;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	padding-right: 20px;
     text-align: center;
-    backdrop-filter: blur(10px); /* Apply blur effect */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     position: relative;
-    height: 250px;
+    min-height: 250px; /* Adjusted min-height */
     min-width: 200px;
-  }
-  
-  .item img {
+}
+
+.item img {
     max-width: 100%;
     max-height: 150px;
     width: auto;
     height: auto;
     margin: auto;
-  }
-  
-  .item h3 {
-    margin-top: 10px;
-    font-size: 18px;
-  }
+}
 
-  .item .make-offer{
-    position: relative;
-    top: 70%;
-  }
-  
-  .item p {
+.item h3 {
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+.item p {
     font-size: 14px;
-  }
-  
-  .delete-button {
+    margin-top: 10px;
+    margin-bottom: 10px; /* Adjusted margin */
+    overflow: hidden; /* Added to prevent overflowing */
+    text-overflow: ellipsis; /* Added to show ellipsis for overflowed text */
+}
+
+.delete-button {
     position: absolute;
     top: -10px;
     right: -10px;
@@ -86,20 +87,44 @@ body {
     box-shadow: 0 4px 8px rgba(255, 255, 0, 0);
     text-decoration: none;
     font-size: 25px;
-    z-index: 1; /* Ensure it's above other content */
-  }
-  
-  .plus-button {
+    z-index: 1;
+}
+
+.plus-button {
     position: absolute;
     font-size: 40px;
     top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
-  }
+}
 
-  .item p {
-    margin-top: auto; 
-    margin-bottom: 10px;
-    font-size: 14px;
-  }
+.social-icons {
+    display: flex;
+}
+
+.social-icons a {
+    margin-right: 10px;
+}
+
+#book_title{
+  margin-top: 5px;
+  margin-bottom: 2px;
+  border: 1px solid black;
+}
+
+#book_category{
+  margin-top: 0;
+  margin-bottom: 2px;
+  border: 1px solid black;
+}
+
+#summary {
+  overflow-y: scroll;
+  width: 200px;
+  max-height: 100px;
+}
+
+#summary::-webkit-scrollbar {
+  display: none;
+}

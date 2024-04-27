@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import app.bookstore.socialbookstore.domain.Book;
 import app.bookstore.socialbookstore.domain.BookAuthor;
 import app.bookstore.socialbookstore.mappers.BookAuthorMapper;
+import app.bookstore.socialbookstore.mappers.BookCategoryMapper;
 import app.bookstore.socialbookstore.mappers.BookMapper;
 import jakarta.transaction.Transactional;
 
@@ -21,6 +22,8 @@ public class BookServiceImpl implements BookService{
 	@Autowired
 	BookAuthorMapper bookAuthorMapper;
 
+	@Autowired
+	BookCategoryMapper bookCategoryMapper;
 	
 	@Override
 	public void saveBook(Book book) {
@@ -86,8 +89,7 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public List<Book> getByFavouriteCategory(int userId) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Integer> getByFavouriteCategory(int userId) {
+		return bookCategoryMapper.findByFavouriteCategories(userId);
 	}
 }

@@ -29,8 +29,8 @@
     <a href="/success" class="home-button"><i class="fas fa-home"></i></a>
     <div class="container">
         <div class="item" th:each="category : ${categories}">
-            <form class="deleteForm" th:action="@{/delete_category_by_name}" method="post">
-                <input type="hidden" name="name" th:value="${category.categoryName}" />
+            <form class="deleteForm" th:action="@{/favourite_category_by_name}" method="post">
+                <input type="hidden" name="categoryName" th:value="${category.categoryName}" />
                 <button type="submit" class="heart-button"><i class="far fa-heart"></i></button>
             </form>
             <img src="/css/pngwing.com.png" alt="Category Image">
@@ -39,21 +39,5 @@
         </div>
     </div>
 </div>
-
-<script>
-    document.querySelectorAll('.heart-button').forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.preventDefault();
-            const icon = button.querySelector('i');
-            if (icon.classList.contains('far')) {
-                icon.classList.remove('far');
-                icon.classList.add('fas', 'filled-heart');
-            } else {
-                icon.classList.remove('fas', 'filled-heart');
-                icon.classList.add('far');
-            }
-        });
-    });
-</script>
 </body>
 </html>

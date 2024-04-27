@@ -65,6 +65,46 @@ header {
     margin-left: 30px;
 }
 
+footer {
+    color: white;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.05); /* Semi-transparent white */
+    backdrop-filter: blur(10px); /* Add a blur effect */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    position: relative; /* Ensure footer's position is relative */
+}
+
+footer p {
+    font-size: 14px; /* Reduced font size */
+}
+
+#currentYear {
+    font-size: 14px; /* Reduced font size */
+}
+
+.social-icons {
+    text-align: center;
+}
+
+
+.social-icons a {
+  display: inline-block;
+  margin-right: 20px; /* Adjust as needed */
+  font-size: 16px;
+  color: inherit; /* Keep the default color of the links */
+  text-decoration: none; /* Remove underline */
+}
+
+/* This removes hover effect from VC and GM icons */
+.social-icons a:hover {
+  color: inherit;  /* Keep the default color */
+  background-color: transparent;  /* No background color change */
+}
+
+.social-icons a:last-child {
+  margin-right: 0; /* Remove margin for the last link */
+}
+
 a {
     color: #ffffff;
     text-decoration: none;
@@ -134,7 +174,12 @@ input[type="submit"]:hover {
     right: 20px; 
 }
 
+#searchInput{
+	font-family: "Comic Sans MS" , sans-serif;
+}
+
 .logout button {
+	font-family: "Comic Sans MS" , sans-serif;
     background-color: #001f3f; 
     border: none;
     color: white;
@@ -187,6 +232,9 @@ input[type="submit"]:hover {
     transform: translateY(5px);
 }
 
+.request p{
+	margin: 10px;
+}
 
 .request {
     height: 50px;
@@ -206,7 +254,7 @@ input[type="submit"]:hover {
 .request:hover {
     box-shadow: 0px 0px 10px white;
     background-color: #5f5f5fd7;
-    height: 150px;
+    height: 190px;
 }
 
 
@@ -330,9 +378,14 @@ button:active {
 .dropdown {
     visibility: hidden;
     transform: translateX(50%); /* Start off-screen to the left */
-    transition: opacity 0.3s ease, transform 0.3s ease; /* Add transition for opacity and transform */
-    
-    
+    transition: opacity 0.3s ease, transform 0.3s ease; /* Add transition for opacity and transform */  
+}
+
+#searchForm{
+	display: flex;
+	flex-direction: column;
+	
+	align-items: center;
 }
 
 .dropdown.visible {
@@ -348,33 +401,22 @@ button:active {
     justify-content: center;
 }
 
-.dropdowns select {
-    border: none; /* Remove border */
-    border-radius: 5px;
-    margin: 10px;
-    padding: 10px; /* Added padding */
-    box-sizing: border-box;
-    background-color: #3f3949; /* Background color */
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease; /* Transition for background color */
-    position: relative; /* Added position */
-    left: -45px; /* Adjusted left position */
+.dropdowns button{
+	font-family: "Comic Sans MS" , sans-serif;
+	color: white;
+	border-radius: 20px;
+	background-color: var(--main-color);
+	opacity: 0.7;
+	border: 1px solid white;
 }
 
-
-.dropdowns select:hover,
-.dropdowns select:focus {
-    background-color: #5f5f5f; /* Background color on hover/focus */
+.dropdowns button:hover{
+	background-color: var(--main-color);
+	box-shadow: 0px 0px 5px white;
+	opacity: 1;
+	border: none;
 }
 
-.dropdowns select option {
-    background-color: #5f5f5f; /* Option background color */
-    color: white;
-    font-size: 16px;
-}
-
-.dropdowns select option:hover {
-    background-color: #333; /* Darkened option background color on hover */
+#searchWrapper{
+	margin: auto;
 }

@@ -21,6 +21,7 @@ import app.bookstore.socialbookstore.domain.User;
 import app.bookstore.socialbookstore.domain.UserProfile;
 import app.bookstore.socialbookstore.mappers.UserProfileMapper;
 import app.bookstore.socialbookstore.recommendationstrategy.FavouriteBookAuthorsStrategy;
+import app.bookstore.socialbookstore.recommendationstrategy.FavouriteBookCategoryStrategy;
 import app.bookstore.socialbookstore.recommendationstrategy.RecommendationEngine;
 import app.bookstore.socialbookstore.recommendationstrategy.RecommendationEngineStrategy;
 import app.bookstore.socialbookstore.searchstrategy.BookAuthorExactStrategy;
@@ -36,6 +37,7 @@ import app.bookstore.socialbookstore.services.BookService;
 import app.bookstore.socialbookstore.services.RequestService;
 import app.bookstore.socialbookstore.services.UserProfileService;
 import app.bookstore.socialbookstore.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class UserController {
@@ -83,29 +85,33 @@ public class UserController {
 		List<String> usersReq = userProfileMapper.getUsersRequests(user.get().getUserId());
 		
 		List<Request> requestList = new ArrayList<>();
+		List<UserProfile> userProfileRequesters = new ArrayList<>();
 		
         System.out.println("Size of users requests: " + usersReq.size());
-        //System.out.println("Id of users requests: " + usersReq.get(1));
+        
+        
         for (String id : usersReq) {
         	
         	String[] temp = id.split(",");
         	
         	try {
         		
-                Integer userId = Integer.parseInt(temp[0].trim()); 
+                Integer borrowerId = Integer.parseInt(temp[0].trim()); 
                 Integer bookId = Integer.parseInt(temp[1].trim()); 
                 
-                System.out.println("Requester id: " + userId);
-                Optional<UserProfile> tmp = userProfileMapper.findByUserProfileId(userId);
+                System.out.println("Requester id: " + borrowerId);
+                Optional<UserProfile> tmp = userProfileMapper.findByUserProfileId(borrowerId);
                 
                 if (tmp.isPresent()) {
                 	
-                    Request newRequest = new Request(userId,bookId);
+                    Request newRequest = new Request(borrowerId,bookId);
+                    newRequest.setBookTitle(bookService.getById(bookId).get().getTitle());
                     requestList.add(newRequest);
+                    userProfileRequesters.add(tmp.get());
                     
                 } else {
                 	
-                    System.out.println("User with id " + userId + " not found.");
+                    System.out.println("User with id " + borrowerId + " not found.");
                     
                 }
                 
@@ -117,6 +123,9 @@ public class UserController {
         System.out.println(requestList.size());
         
         model.addAttribute("requestingUsers", requestList);
+        model.addAttribute("userProfileRequesters", userProfileRequesters);
+        
+        
         
         List<String> closedRequests = userProfileService.getClosedRequests(user.get().getUserId());
         
@@ -265,6 +274,14 @@ public class UserController {
 		return "redirect:/success";
 	}
 	
+	@PostMapping("/decline_request")
+    public String declineRequest(@RequestParam("borrowerId") int borrowerId, @RequestParam("bookId") int bookId) {
+        userProfileService.deleteSimpleBookRequest(borrowerId, bookId);
+        Request newRequest = new Request(borrowerId, bookId,0);
+        requestService.saveRequest(newRequest);
+        return "redirect:/success";
+    }
+	
 	@RequestMapping("/success/showInfo")
 	public String showInfo(Model model) {
 		return "dashboard";
@@ -286,6 +303,33 @@ public class UserController {
 		Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
 		
 		recommendationEngineStrategy = new FavouriteBookAuthorsStrategy();
+		recommendationEngine.configureRecommendationEngine(recommendationEngineStrategy);
+		
+		List<Integer> recommended = recommendationEngine.recommend(currentUser.get().getUserProfileId(), bookService);
+		
+		List<Book> recommendedBooks = new ArrayList<>();
+		
+		for(Integer elem: recommended) {
+			recommendedBooks.add(bookService.getById(elem).get());
+		}
+		
+		model.addAttribute("recommendedBooks",recommendedBooks);
+		model.addAttribute("currentUserId",currentUser.get().getUserProfileId());
+		
+        return "Recommendations";
+    } 
+	
+	@RequestMapping("/recommendations_categories")
+    public String showRecommendationsByCategory(Model model) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		System.err.println(currentPrincipalName);
+		
+		Optional<User> user = userService.getUser(currentPrincipalName);
+		
+		Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
+		
+		recommendationEngineStrategy = new FavouriteBookCategoryStrategy();
 		recommendationEngine.configureRecommendationEngine(recommendationEngineStrategy);
 		
 		List<Integer> recommended = recommendationEngine.recommend(currentUser.get().getUserProfileId(), bookService);
@@ -344,6 +388,7 @@ public class UserController {
 		Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
 		
 		book.setBookOwnerId(currentUser.get().getUserProfileId());
+		book.setSummary(summary);
 		
 		bookService.saveBook(book);
 
@@ -401,7 +446,7 @@ public class UserController {
 	
 	
 	@PostMapping("/request_book_offer")
-	public String requestBookOffer(@RequestParam("bookId") int bookId,Model model) {
+	public String requestBookOffer(HttpServletRequest request, @RequestParam("bookId") int bookId,Model model) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 		Optional<User> user = userService.getUser(currentPrincipalName);
@@ -414,14 +459,23 @@ public class UserController {
 		
 		bookService.saveBook(selectedBook.get());
 		
-		return "redirect:/book_offers";
+		String referer = request.getHeader("Referer");
+		//System.out.println(referer);
+		
+        return "redirect:" + referer;
+		
+		//return "redirect:/book_offers";
 	}
 	
 	
 	@PostMapping("/updateProfile")
 	public String updateProfile(Model model, @RequestParam(value = "username_profile", required = false) String username, 
 			@RequestParam(value = "full_name", required = false) String fullName, 
-			@RequestParam(value = "user_age", required = false) String userAge) {
+			@RequestParam(value = "user_age", required = false) String userAge,
+			@RequestParam(value = "user_address", required = false) String address,
+            @RequestParam(value = "userEmail", required = false) String email,
+            @RequestParam(value = "phoneNumber", required = false) String phone_number) {
+		
 		System.out.println("Hello");
 		
 		try {
@@ -441,6 +495,9 @@ public class UserController {
             currentProfile.get().setUsernameProfile(username);
             currentProfile.get().setFullName(fullName);
             currentProfile.get().setUserAge(Integer.parseInt(userAge));
+            currentProfile.get().setUserAddress(address);
+            currentProfile.get().setUserEmail(email);
+            currentProfile.get().setPhoneNumber(phone_number);
             
             userProfileService.saveUserProfile(currentProfile.get());
             
@@ -502,8 +559,24 @@ public class UserController {
         return "favourite_authors";
     }
 	
-    @RequestMapping("/favourite_categories")
+	@RequestMapping("/favourite_categories")
     public String showFavouriteCategories(Model model) {
+        
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        System.err.println(currentPrincipalName);
+        Optional<User> user = userService.getUser(currentPrincipalName);
+        Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
+        
+        int myId = currentUser.get().getUserProfileId();
+        List<String> tempCategories = userProfileMapper.findMyBookCategories(myId);
+        List<BookCategory> bookCategories= new ArrayList<>();
+        for(String category: tempCategories) {
+            bookCategories.add(bookCategoryService.getCategoryByName(category).get());
+        }
+        System.out.println(myId);
+        model.addAttribute("categories", bookCategories);
+        System.out.println("hereeee yoooooooooooo");
         
         return "favourite_categories";
     }
@@ -572,6 +645,7 @@ public class UserController {
         
         System.out.println(userProfileMapper.findOtherBookCategories(myId));
         
+        
         return "redirect:/show_categories";
     }
     
@@ -635,12 +709,6 @@ public class UserController {
         return "select_categories"; 
     }
     
-    @PostMapping("/decline_request")
-    public String declineRequest(@RequestParam("borrowerId") int borrowerId, @RequestParam("bookId") int bookId) {
-        userProfileService.deleteSimpleBookRequest(borrowerId, bookId);
-        Request newRequest = new Request(borrowerId, bookId,0);
-        requestService.saveRequest(newRequest);
-        return "redirect:/success";
-    }
+    
     
 }

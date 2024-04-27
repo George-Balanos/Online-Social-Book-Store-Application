@@ -22,6 +22,17 @@ public class UserProfile {
 	@Column(name="user_age")
 	private int userAge;
 	
+	@Column(name="address")
+	private String userAddress;
+	
+	@Column(name="phone_number")
+	private String phoneNumber;
+	
+	@Column(name="email")
+	private String userEmail;
+	
+	
+
 	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(
 			name = "user_profile_author",
@@ -51,6 +62,30 @@ public class UserProfile {
 	public UserProfile() {
 		super();
 		
+	}
+	
+	public String getUserAddress() {
+		return userAddress;
+	}
+
+	public void setUserAddress(String userAddress) {
+		this.userAddress = userAddress;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getUserEmail() {
+		return userEmail;
+	}
+
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
 	
 	public String getUsernameProfile() {

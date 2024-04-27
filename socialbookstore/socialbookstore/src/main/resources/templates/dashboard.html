@@ -29,18 +29,22 @@
             </div>
             <p><span class="styled-text">Magic Bookstore</span></p>
             
-            <form id="searchForm" method="post" th:action="@{/search}">
-			    <input id="searchInput" type="text" name="search" placeholder="Search..." th:value="${searchInput}" />
-			    <div class="dropdowns">
-			        <button type="submit" th:formaction="@{/search_exact_author}" name="query">Exact Author</button>
-			        <button type="submit" th:formaction="@{/search_inexact_author}" name="query">Inexact Author</button>
-			        <button type="submit" th:formaction="@{/search_exact_title}" name="query">Exact Title</button>
-			        <button type="submit" th:formaction="@{/search_inexact_title}" name="query">Inexact Title</button>
-			        <!-- Add more buttons with different th:formaction attributes as needed -->
-			    </div>
-			</form>
+            
            
         </header>
+        
+        <div id="searchWrapper">
+	        <form id="searchForm" method="post" th:action="@{/search}">
+				<input id="searchInput" type="text" name="search" placeholder="Search..." th:value="${searchInput}" />
+				<div class="dropdowns">
+					<button type="submit" th:formaction="@{/search_exact_author}" name="query">Exact Author</button>
+				    <button type="submit" th:formaction="@{/search_inexact_author}" name="query">Inexact Author</button>
+				    <button type="submit" th:formaction="@{/search_exact_title}" name="query">Exact Title</button>
+				    <button type="submit" th:formaction="@{/search_inexact_title}" name="query">Inexact Title</button>     
+				</div>    
+			</form>	   
+		</div>
+		 
         <div class="main-part">
         	<div class="left-sidebar">
 	            <div class="sidebar">
@@ -48,7 +52,8 @@
 	                <a th:href="@{my_book_offers}" class="sidebar-link">My book offers</a>
 	                <a th:href="@{book_offers}" class="sidebar-link">Book offers</a>
 	                <a th:href="@{favourites}" class="sidebar-link">Favourites</a>
-	                <a th:href="@{recommendations_authors}" class="sidebar-link">Recommendations</a>
+	                <a th:href="@{recommendations_authors}" class="sidebar-link">Recommended By Author</a>
+	                <a th:href="@{recommendations_categories}" class="sidebar-link">Recommended By Category</a>
 	                <a th:href="@{edit_profile}" class="sidebar-link">Profile Settings</a>
 	            </div>
 	            <div class="dropdown">  
@@ -69,11 +74,10 @@
                     <div class="request-title">Request <span th:text="${requestIndex.index + 1}"></span></div>
                     <div class="wrapper">  
                         <div class="contact-info">
-                            Email:
-                            <br>
-                            <p th:text="${'UserId: '+tempRequest.getBorrowerId()}"></p>
-                            <br>
-                            <br>
+                        	<p th:text="${'Book Title: ' + tempRequest.getBookTitle()}"></p>
+                            <p th:text="${'Username: ' + userProfileRequesters.get(requestIndex.index).getUsernameProfile()}"></p>
+                            <p th:text="${'Email: ' + userProfileRequesters.get(requestIndex.index).getUserEmail()}"></p>
+                            <p th:text="${'Phone Number: ' + userProfileRequesters.get(requestIndex.index).getPhoneNumber()}"></p>
                         </div>
                         <div class="reply">
                         	<form th:action="@{/accept_request}" method="post">
@@ -93,7 +97,14 @@
         </div>
         <footer>
             <p>&copy; Magic Bookstore<span id="currentYear"> 2024</span></p>
-            <br>
+            <div class="social-icons">
+                <a href="https://www.linkedin.com/in/george-mpalanos-b51a1a281/" target="_blank">
+                    <i class="fab fa-linkedin"></i> GM
+                </a>
+                <a href="https://www.linkedin.com/in/evangelos-chasanis-708610280/" target="_blank">
+                    <i class="fab fa-linkedin"></i> VC
+                </a>
+            </div>
         </footer>
     </div>
     

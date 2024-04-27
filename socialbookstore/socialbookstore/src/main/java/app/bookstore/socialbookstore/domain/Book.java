@@ -19,7 +19,19 @@ public class Book {
 	@Column(name="title")
 	private String title;
 	
+	@Column(name="summary")
+	private String summary;
 	
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+
+
+
 	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(
 		name = "author_book",

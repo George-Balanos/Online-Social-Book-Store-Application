@@ -20,5 +20,5 @@ public interface BookService {
 	public List<Book> getByInexactAuthorName(String name);
 	
 	public List<Integer> getByFavouriteAuthors(int userId);
-	public List<Book> getByFavouriteCategory(int userId);
+	public List<Integer> getByFavouriteCategory(int userId);
 }

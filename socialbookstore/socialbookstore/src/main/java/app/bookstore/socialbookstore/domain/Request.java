@@ -75,4 +75,8 @@ public class Request {
 	public String getBookTitle() {
 		return this.bookTitle;
 	}
+	
+	public void setBookTitle(String title) {
+		this.bookTitle = title;
+	}
 }

@@ -24,6 +24,4 @@ public interface BookMapper extends JpaRepository<Book, Integer>{
 	List<Book> findByBookAuthorsAuthorName(String authorName); //Exact query
 	@Query("SELECT b FROM Book b JOIN b.bookAuthors ba WHERE ba.authorName LIKE %:authorName%")
 	List<Book> findByBookAuthorsAuthorNameContaining(String authorName); //Inexact query
-	
-	
 } 

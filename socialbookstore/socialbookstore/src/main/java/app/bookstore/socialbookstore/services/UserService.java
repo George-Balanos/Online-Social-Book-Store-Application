@@ -1,9 +1,6 @@
 package app.bookstore.socialbookstore.services;
 
 import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
 import app.bookstore.socialbookstore.domain.User;
 
 

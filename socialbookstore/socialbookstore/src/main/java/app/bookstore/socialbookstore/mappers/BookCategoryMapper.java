@@ -15,7 +15,6 @@ public interface BookCategoryMapper extends JpaRepository<BookCategory, Integer>
 	
 	Optional<BookCategory> findByCategoryName(String name);
 	
-	
 	@Query(value="SELECT b.book_id FROM books b INNER JOIN user_profile_book_category u ON b.category_id = u.category_id "
 			 + "WHERE u.user_profile_id = :userId",
 			 nativeQuery=true)

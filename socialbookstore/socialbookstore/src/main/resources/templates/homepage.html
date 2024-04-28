@@ -7,32 +7,97 @@
     <title>Welcome Page</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Comic Sans MS", sans-serif;
+            font-size: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
             text-align: center;
+            background-image: url('/css/37916.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .button-container {
+            display: inline-block;
+            position: relative;
         }
 
         .button {
             padding: 10px 20px;
-            font-size: 16px;
-            background-color: #007bff;
-            color: #fff;
+            font-size: 30px;
+            background-color: #4CAF50;
+            color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 25px;
             cursor: pointer;
             transition: background-color 0.3s;
+            margin-top: 20px;
+            text-shadow: 0px 0px 5px rgba(0, 0, 0, 1);
+            box-shadow: 0px 0px 5px black;
         }
 
         .button:hover {
-            background-color: #0056b3;
+            background-color: #45a049;
+            box-shadow: 0px 0px 5px white;
         }
+
+        h1,
+        p {
+            color: white;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 1);
+        }
+
+        span {
+            font-size: 40px;
+            font-family: Copperplate, Papyrus, fantasy;
+            text-shadow: 0px 0px 5px rgba(0, 0, 0, 1);
+            color: white; /* Set font color to white */
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+
+        .button-container:hover span {
+            animation: shake 5.5s infinite;
+        }
+
+		@keyframes shake {
+		    0% {
+		        transform: scale(1);
+		        opacity: 1;
+		        text-shadow: 0px 0px 10px blue;
+		    }
+		    25% {
+		        transform: scale(1.5);
+		        opacity: 1;
+		        text-shadow: 0px 0px 10px blue;
+		    }
+		    50% {
+		        transform: scale(1);
+		        opacity: 0.8;
+		    }
+		    75%{
+		    	transform: scale(1.5);
+		    	text-shadow: 0px 0px 10px blue;
+		        opacity: 1;
+		    }
+		    100%{
+		    	transform: scale(1);
+		        opacity: 1;
+		        text-shadow: 0px 0px 10px blue;
+		    }
+		}
+
+
     </style>
 </head>
 
 <body>
-	<div sec:authorize="hasRole('ROLE_ANONYMOUS')">
-		<h1>Welcome</h1>
-	    <p>Click the button below to enter:</p>
-	    <button class="button" onclick="window.location.href='/login'">Enter</button>
+    <div sec:authorize="hasRole('ROLE_ANONYMOUS')">
+        <h1>Welcome</h1>
+        <p>Click the button below to enter <div class="button-container"><span>Magic<br>BookStore</span><br><button class="button" onclick="window.location.href='/login'">Enter</button></div></p>
     </div>
 </body>
 

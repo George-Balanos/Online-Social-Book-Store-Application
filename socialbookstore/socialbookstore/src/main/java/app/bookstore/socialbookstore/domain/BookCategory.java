@@ -49,25 +49,17 @@ public class BookCategory {
 		return categoryName;
 	}
 
-
-
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
 	}
-
-
 
 	public List<Book> getBooksInCategory() {
 		return booksInCategory;
 	}
 
-
-
 	public void setBooksInCategory(List<Book> booksInCategory) {
 		this.booksInCategory = booksInCategory;
 	}
-
-
 
 	public void addBookInCategory(Book bookInCategory) {
 		booksInCategory.add(bookInCategory);

@@ -36,9 +36,9 @@ public interface UserProfileMapper extends JpaRepository<UserProfile, Integer>{
 	@Transactional
     @Modifying
     @Query(
-        value = "DELETE FROM userprofile_book WHERE book_id = :myId",
+        value = "DELETE FROM userprofile_book WHERE book_id = :bookId",
         nativeQuery = true)
-    void removeBookRequest(@Param("myId") int myId);
+    void removeBookRequest(@Param("bookId") int bookId);
 	
 	@Query(
 			value = "SELECT category_name FROM book_categories WHERE category_id "
@@ -64,27 +64,26 @@ public interface UserProfileMapper extends JpaRepository<UserProfile, Integer>{
 	@Query(
             value= "SELECT user_profile_id,books.book_id "
             	 + "FROM userprofile_book INNER JOIN books on books.book_id = userprofile_book.book_id "
-            	 + "WHERE books.book_owner_id = :id",
+            	 + "WHERE books.book_owner_id = :book_owner_id",
             nativeQuery = true)
-    List<String> getUsersRequests(@Param("id") int id);
+    List<String> findUsersRequests(@Param("book_owner_id") int book_owner_id);
 	
 	
 	@Query(
-            value= "SELECT book_id, user_profile_id from userprofile_book where :id = book_id and :borrower_id <> user_profile_id",
+            value= "SELECT book_id, user_profile_id from userprofile_book where :bookId = book_id and :borrower_id <> user_profile_id",
             nativeQuery = true)
-    List<String> findDeclinedUsers(@Param("id") int id, @Param("borrower_id") int borrowerId);
+    List<String> findDeclinedUsers(@Param("bookId") int bookId, @Param("borrower_id") int borrowerId);
 	
 	@Query(
-            value = "SELECT book_id, status FROM requests WHERE borrower_id = :id",
+            value = "SELECT book_id, status FROM requests WHERE borrower_id = :borrowerId",
             nativeQuery = true)
-    List<String> findClosedRequests(@Param("id") int id);
+    List<String> findReviewedRequests(@Param("borrowerId") int borrowerId);
 	
 	@Transactional
     @Modifying
-    @Query(value = "DELETE FROM userprofile_book WHERE user_profile_id = :id and book_id = :bookId",
+    @Query(value = "DELETE FROM userprofile_book WHERE user_profile_id = :myId and book_id = :bookId",
            nativeQuery = true)
-    void removeSimpleBookRequest(@Param("id") int id, @Param("bookId") int bookId);
-	
+    void removeSingleBookRequest(@Param("myId") int myId, @Param("bookId") int bookId);
 	
 	@Transactional
     @Modifying

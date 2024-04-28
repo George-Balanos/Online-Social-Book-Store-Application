@@ -21,16 +21,6 @@ public class Book {
 	
 	@Column(name="summary")
 	private String summary;
-	
-	public String getSummary() {
-		return summary;
-	}
-
-	public void setSummary(String summary) {
-		this.summary = summary;
-	}
-
-
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(
@@ -75,6 +65,13 @@ public class Book {
 		
 	}
 	
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
 	
 	public int getBookOwnerId() {
 		return bookOwnerId;
@@ -88,64 +85,43 @@ public class Book {
 		return bookId;
 	}
 
-
-
 	public void setBookId(int bookId) {
 		this.bookId = bookId;
 	}
-
-
 
 	public String getTitle() {
 		return title;
 	}
 
-
-
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
-
 
 	public List<BookAuthor> getBookAuthors() {
 		return bookAuthors;
 	}
 
-
-
 	public void setBookAuthors(List<BookAuthor> bookAuthors) {
 		this.bookAuthors = bookAuthors;
 	}
-
-
 
 	public BookCategory getBookCategory() {
 		return bookCategory;
 	}
 
-
-
 	public void setBookCategory(BookCategory bookCategory) {
 		this.bookCategory = bookCategory;
 	}
-
-
 
 	public Set<UserProfile> getRequestingUsers() {
 		return requestingUsers;
 	}
 
-
-
 	public void setRequestingUsers(Set<UserProfile> requestingUsers) {
 		this.requestingUsers = requestingUsers;
 	}
 
-
-
 	public void addRequestingUser(UserProfile requestingUser) {
 		requestingUsers.add(requestingUser);
 	}
-	
 }

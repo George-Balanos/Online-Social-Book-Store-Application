@@ -11,5 +11,4 @@ import app.bookstore.socialbookstore.domain.Request;
 public interface RequestMapper extends JpaRepository<Request, Integer>{
 	
 	List<Request> findByBorrowerId(int borrowerId);
-	
 }

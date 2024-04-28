@@ -30,8 +30,6 @@ public class UserProfile {
 	
 	@Column(name="email")
 	private String userEmail;
-	
-	
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(
@@ -92,79 +90,53 @@ public class UserProfile {
 		return usernameProfile;
 	}
 
-
-
 	public void setUsernameProfile(String usernameProfile) {
 		this.usernameProfile = usernameProfile;
 	}
-
-
 
 	public String getFullName() {
 		return fullName;
 	}
 
-
-
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}
-
-
 
 	public int getUserAge() {
 		return userAge;
 	}
 
-
-
 	public void setUserAge(int userAge) {
 		this.userAge = userAge;
 	}
-
-
 
 	public Set<BookAuthor> getFavouriteBookAuthors() {
 		return favouriteBookAuthors;
 	}
 
-
-
 	public void setFavouriteBookAuthors(Set<BookAuthor> favouriteBookAuthors) {
 		this.favouriteBookAuthors = favouriteBookAuthors;
 	}
-
-
 
 	public Set<BookCategory> getFavouriteBookCategories() {
 		return favouriteBookCategories;
 	}
 
-
-
 	public void setFavouriteBookCategories(Set<BookCategory> favouriteBookCategories) {
 		this.favouriteBookCategories = favouriteBookCategories;
 	}
-
-
 
 	public Set<Book> getBookOffers() {
 		return bookOffers;
 	}
 
-
-
 	public void setBookOffers(Set<Book> bookOffers) {
 		this.bookOffers = bookOffers;
 	}
 
-
-
 	public void setUserProfileId(int userProfileId) {
 		this.userProfileId = userProfileId;
 	}
-
-
 
 	public void addFavouriteBookAuthor(BookAuthor bookAuthor) {
 		this.favouriteBookAuthors.add(bookAuthor);

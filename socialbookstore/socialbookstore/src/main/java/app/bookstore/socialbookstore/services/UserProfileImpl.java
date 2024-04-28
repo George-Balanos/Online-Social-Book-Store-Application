@@ -62,7 +62,7 @@ public class UserProfileImpl implements UserProfileService{
 	@Override
     public List<String> getUsersRequests(int id) {
 
-        return userProfileMapper.getUsersRequests(id);
+        return userProfileMapper.findUsersRequests(id);
     }
 
 	@Override
@@ -77,16 +77,48 @@ public class UserProfileImpl implements UserProfileService{
 
 	@Override
     public List<String> getClosedRequests(int id) {
-        return userProfileMapper.findClosedRequests(id);
+        return userProfileMapper.findReviewedRequests(id);
     }
 
 	@Override
     public void deleteSimpleBookRequest(int id, int bookId) {
-        userProfileMapper.removeSimpleBookRequest(id, bookId);
+        userProfileMapper.removeSingleBookRequest(id, bookId);
     }
 
 	@Override
 	public void deleteBookRequestAfterBookOfferWithdraw(int id) {
 		userProfileMapper.removeBookRequestAfterWithdrawal(id);
+	}
+
+	@Override
+	public List<String> getMyBookAuthors(int id) {
+		return userProfileMapper.findMyBookAuthors(id);
+	}
+
+	@Override
+	public List<String> getMyBookCategories(int id) {
+		return userProfileMapper.findMyBookCategories(id);
+	}
+
+	@Override
+	public List<String> getOtherBookAuthors(int id) {
+		return userProfileMapper.findOtherBookAuthors(id);
+	}
+
+	@Override
+	public List<String> getOtherBookCategories(int id) {
+		return userProfileMapper.findOtherBookCategories(id);
+	}
+
+	@Override
+	public void deleteMyBookCategories(int id, String categoryName) {
+		userProfileMapper.removeMyBookCategories(id, categoryName);
+		
+	}
+
+	@Override
+	public void deleteMyBookAuthors(int id, String authorName) {
+		userProfileMapper.removeMyBookAuthors(id, authorName);
+		
 	}
 }

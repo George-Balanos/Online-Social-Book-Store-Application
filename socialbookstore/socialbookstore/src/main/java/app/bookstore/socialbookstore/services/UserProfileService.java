@@ -18,4 +18,10 @@ public interface UserProfileService {
 	public List<String> getClosedRequests(int id);
 	public void deleteSimpleBookRequest(int id, int bookId);
 	public void deleteBookRequestAfterBookOfferWithdraw(int id);
+	public List<String> getMyBookAuthors(int id);
+	public List<String> getMyBookCategories(int id);
+	public List<String> getOtherBookAuthors(int id);
+	public List<String> getOtherBookCategories(int id);
+	public void deleteMyBookCategories(int id, String categoryName);
+	public void deleteMyBookAuthors(int id, String authorName);
 }

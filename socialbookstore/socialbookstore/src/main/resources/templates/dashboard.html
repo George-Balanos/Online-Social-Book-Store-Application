@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +10,11 @@
     .styled-text {
       font-family: Copperplate, Papyrus, fantasy;
       font-size: 50px;
+    }
+    
+     .no-requests-text {
+        color: white;
+        text-align: center;
     }
   </style>
 </head>
@@ -28,70 +33,68 @@
                 </form>
             </div>
             <p><span class="styled-text">Magic Bookstore</span></p>
-            
-            
-           
         </header>
         
         <div id="searchWrapper">
-	        <form id="searchForm" method="post" th:action="@{/search}">
-				<input id="searchInput" type="text" name="search" placeholder="Search..." th:value="${searchInput}" />
-				<div class="dropdowns">
-					<button type="submit" th:formaction="@{/search_exact_author}" name="query">Exact Author</button>
-				    <button type="submit" th:formaction="@{/search_inexact_author}" name="query">Inexact Author</button>
-				    <button type="submit" th:formaction="@{/search_exact_title}" name="query">Exact Title</button>
-				    <button type="submit" th:formaction="@{/search_inexact_title}" name="query">Inexact Title</button>     
-				</div>    
-			</form>	   
-		</div>
-		 
+            <form id="searchForm" method="post" th:action="@{/search}">
+                <input id="searchInput" type="text" name="search" placeholder="Search..." th:value="${searchInput}" />
+                <div class="dropdowns">
+                    <button type="submit" th:formaction="@{/search_exact_author}" name="query">Exact Author</button>
+                    <button type="submit" th:formaction="@{/search_inexact_author}" name="query">Inexact Author</button>
+                    <button type="submit" th:formaction="@{/search_exact_title}" name="query">Exact Title</button>
+                    <button type="submit" th:formaction="@{/search_inexact_title}" name="query">Inexact Title</button>     
+                </div>    
+            </form>       
+        </div>
+         
         <div class="main-part">
-        	<div class="left-sidebar">
-	            <div class="sidebar">
-	            	<a class="sidebar-link" id="inbox"><i class="fas fa-inbox"></i></a>
-	                <a th:href="@{my_book_offers}" class="sidebar-link">My book offers</a>
-	                <a th:href="@{book_offers}" class="sidebar-link">Book offers</a>
-	                <a th:href="@{favourites}" class="sidebar-link">Favourites</a>
-	                <a th:href="@{recommendations_authors}" class="sidebar-link">Recommended By Author</a>
-	                <a th:href="@{recommendations_categories}" class="sidebar-link">Recommended By Category</a>
-	                <a th:href="@{edit_profile}" class="sidebar-link">Profile Settings</a>
-	            </div>
-	            <div class="dropdown">  
-
+            <div class="left-sidebar">
+                <div class="sidebar">
+                    <a class="sidebar-link" id="inbox"><i class="fas fa-inbox"></i></a>
+                    <a th:href="@{my_book_offers}" class="sidebar-link">My book offers</a>
+                    <a th:href="@{book_offers}" class="sidebar-link">Book offers</a>
+                    <a th:href="@{favourites}" class="sidebar-link">Favourites</a>
+                    <a th:href="@{recommendations_authors}" class="sidebar-link">Recommended By Author</a>
+                    <a th:href="@{recommendations_categories}" class="sidebar-link">Recommended By Category</a>
+                    <a th:href="@{edit_profile}" class="sidebar-link">Profile Settings</a>
+                </div>
+                <div class="dropdown">  
                     <div class="inbox-info">
                         <p th:each="tempResponse: ${myResponses}">
-					        <span th:text="${tempResponse.getBookTitle() + ': '}" ></span>
-					        <!-- Append accepted/rejected text with inline style -->
-					        <span th:text="${tempResponse.status == 1 ? 'Accepted' : 'Rejected'}" 
-					              th:style="${tempResponse.status == 1} ? 'color: green;' : 'color: red;'"></span>
-					    </p>
+                            <span th:text="${tempResponse.getBookTitle() + ': '}" ></span>
+                            <!-- Append accepted/rejected text with inline style -->
+                            <span th:text="${tempResponse.status == 1 ? 'Accepted' : 'Rejected'}" 
+                                  th:style="${tempResponse.status == 1} ? 'color: green;' : 'color: red;'"></span>
+                        </p>
                     </div>
-
                 </div>
-	        </div>
+            </div>
             <div class="sidebar" id="requests">
-                <div class="request" th:each="tempRequest, requestIndex : ${requestingUsers}">
+                <div class="request" th:each="tempRequest, requestIndex : ${requestingUsers}" th:if="${not #lists.isEmpty(requestingUsers)}">
                     <div class="request-title">Request <span th:text="${requestIndex.index + 1}"></span></div>
                     <div class="wrapper">  
                         <div class="contact-info">
-                        	<p th:text="${'Book Title: ' + tempRequest.getBookTitle()}"></p>
+                            <p th:text="${'Book Title: ' + tempRequest.getBookTitle()}"></p>
                             <p th:text="${'Username: ' + userProfileRequesters.get(requestIndex.index).getUsernameProfile()}"></p>
                             <p th:text="${'Email: ' + userProfileRequesters.get(requestIndex.index).getUserEmail()}"></p>
                             <p th:text="${'Phone Number: ' + userProfileRequesters.get(requestIndex.index).getPhoneNumber()}"></p>
                         </div>
                         <div class="reply">
-                        	<form th:action="@{/accept_request}" method="post">
-						        <input type="hidden" name="bookId" th:value="${tempRequest.bookId}" />
-						        <input type="hidden" name="borrowerId" th:value="${tempRequest.borrowerId}" />
-						        <button type="submit" class="accept"><i class="fas fa-check fa-fw"></i></button>
-						    </form>
-						    <form th:action="@{/decline_request}" method="post">
-						        <input type="hidden" name="bookId" th:value="${tempRequest.bookId}" />
-						        <input type="hidden" name="borrowerId" th:value="${tempRequest.borrowerId}" />
-						        <button type="submit" class="decline"><i class="fas fa-times fa-fw"></i></button>
-						    </form>
+                            <form th:action="@{/accept_request}" method="post">
+                                <input type="hidden" name="bookId" th:value="${tempRequest.bookId}" />
+                                <input type="hidden" name="borrowerId" th:value="${tempRequest.borrowerId}" />
+                                <button type="submit" class="accept"><i class="fas fa-check fa-fw"></i></button>
+                            </form>
+                            <form th:action="@{/decline_request}" method="post">
+                                <input type="hidden" name="bookId" th:value="${tempRequest.bookId}" />
+                                <input type="hidden" name="borrowerId" th:value="${tempRequest.borrowerId}" />
+                                <button type="submit" class="decline"><i class="fas fa-times fa-fw"></i></button>
+                            </form>
                         </div>
                     </div>
+                </div>
+                <div class="no-requests-text" th:unless="${not #lists.isEmpty(requestingUsers)}">
+                    <p>No requests received yet.</p>
                 </div>
             </div>
         </div>

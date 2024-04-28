@@ -23,7 +23,6 @@
         <div class="item">
             <a th:href="@{/show_categories}" class="plus-button"><i class="fas fa-plus"></i></a>
             <h3 class="make-offer">Add your Favourite Category</h3>
-            <p>Contribute by making an offer!</p>
         </div>
         <div class="item" th:each="tempCategory : ${categories}">
             <form class="deleteForm" th:action="@{/remove_favourite_category}" method="post">
@@ -32,8 +31,7 @@
                 <button type="submit" class="delete-button"><i class="fas fa-trash-alt"></i></button>
             </form>
             <img src="/css/pngwing.com.png" alt="Recommendation 1">
-            <h3 th:text="'Book title: '+${tempCategory.categoryName}"></h3>
-            <p>Description of recommendation 1.</p>
+            <h3 th:text="'Category name: '+${tempCategory.categoryName}"></h3>
         </div>
     </div>
 </div>

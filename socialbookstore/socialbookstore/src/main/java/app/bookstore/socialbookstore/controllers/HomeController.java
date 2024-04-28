@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import app.bookstore.socialbookstore.domain.BookCategory;
-import app.bookstore.socialbookstore.domain.Role;
 import app.bookstore.socialbookstore.domain.User;
 import app.bookstore.socialbookstore.mappers.BookCategoryMapper;
 
@@ -17,7 +16,12 @@ public class HomeController {
 	BookCategoryMapper bookCategoryMapper;
 
     @GetMapping("")
-    public String home() {
+    public String home() {    	
+        return "homepage";
+    }
+   
+    @GetMapping("/login")
+    public String showLoginForm(Model model) {
     	
     	BookCategory bookCategory1 = new BookCategory(1,"Drama");
     	BookCategory bookCategory2 = new BookCategory(2,"Sci-fi");
@@ -31,11 +35,6 @@ public class HomeController {
     	bookCategoryMapper.save(bookCategory4);
     	bookCategoryMapper.save(bookCategory5);
     	
-        return "homepage";
-    }
-   
-    @GetMapping("/login")
-    public String showLoginForm(Model model) {
     	User user = new User();
     	model.addAttribute("user",user);
     	return "authentication/login";

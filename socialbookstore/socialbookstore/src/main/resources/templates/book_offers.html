@@ -21,13 +21,16 @@
     <a href="/success" class="home-button"><i class="fas fa-home"></i></a>
     <div class="container">
         <div class="item" th:each="tempBook : ${allBookOffers}">
+            <h3 id="book_title" th:text="'Book title: '+${tempBook.title}"></h3>
+            <h5 id="book_category" th:text="'Book category: '+${tempBook.getBookCategory().getCategoryName()}"></h5>
+            <img src="/css/pngwing.com.png" alt="Recommendation 1">
             <form class="deleteForm" th:action="@{/request_book_offer}" method="post">
                 <input type="hidden" name="bookId" th:value="${tempBook.bookId}" />
                 <button type="submit" class="delete-button"><i class="fas fa-handshake"></i></button>
             </form>
-            <img src="/css/pngwing.com.png" alt="Recommendation 1">
-            <h3 th:text="'Book title: '+${tempBook.title}"></h3>
-            <p>Description of recommendation 1.</p>
+            <div id="summary">
+                <p th:text="${tempBook.getSummary()}"></p>
+            </div>
         </div>
     </div>
 </div>

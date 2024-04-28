@@ -23,7 +23,6 @@
         <div class="item">
             <a th:href="@{/show_authors}" class="plus-button"><i class="fas fa-plus"></i></a>
             <h3 class="make-offer">Add your Favourite Author</h3>
-            <p>Contribute by making an offer!</p>
         </div>
         <div class="item" th:each="author : ${authors}">
 		    <form class="deleteForm" th:action="@{/remove_favourite_author}" method="post">
@@ -32,7 +31,6 @@
 		    </form>
 		    <img src="/css/pngwing.com.png" alt="Author Image">
 		    <h3 th:text="'Author name: '+${author.authorName}"></h3>
-		    <p>Description of the author.</p>
 		</div>
     </div>
 </div>

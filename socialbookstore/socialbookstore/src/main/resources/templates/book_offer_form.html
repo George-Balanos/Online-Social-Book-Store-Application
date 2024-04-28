@@ -11,7 +11,11 @@
     <title>signup</title>
     <style>
         .fas.fa-home {
-            color: #4CAF50; 
+            color: #4CAF50;
+        }
+
+        .inputBox {
+            margin-bottom: 10px; /* Add margin between each input */
         }
     </style>
 </head>
@@ -20,20 +24,21 @@
     <section>
         <img th:src="@{/css/37916.jpg}" class="bg"></img>
         <div class="login">
-        	<form th:action="@{make_book_offer}" method="post">
-	            <div class="wrapper">
-	                <!-- Add homeButton next to the heading -->
-	                <h2 id="header_message"><a href="/success" class="home-button"><i class="fas fa-home"></i></a> Make a book offer!</h2>
-	                <div class="inputBox">
-	                    <input type="text" id="name" name="title" placeholder="Title">
-	                </div>
-	                <div class="inputBox">
-	                    <input type="text" id="name" name="bookAuthors" placeholder="Book Authors">
-	                </div>
-	                <!-- Dropdown for Book Category -->
+            <form id="bookOfferForm" th:action="@{make_book_offer}" method="post">
+                <div class="wrapper">
+                    <!-- Add homeButton next to the heading -->
+                    <h2 id="header_message"><a href="/success" class="home-button"><i class="fas fa-home"></i></a> Make
+                        a book offer!</h2>
+                    <div class="inputBox">
+                        <input type="text" id="title" name="title" placeholder="Title">
+                    </div>
+                    <div class="inputBox">
+                        <input type="text" id="bookAuthors" name="bookAuthors" placeholder="Book Authors">
+                    </div>
+                    <!-- Dropdown for Book Category -->
                     <div class="inputBox">
                         <select id="bookCategory" name="bookCategory">
-                            <option value="">Select a category</option>
+                            <option value=""  disabled selected>Select a category</option>
                             <option value="Sci-Fi">Sci-Fi</option>
                             <option value="Fantasy">Fantasy</option>
                             <option value="Drama">Drama</option>
@@ -43,15 +48,33 @@
                         </select>
                     </div>
                     <div class="inputBox">
-	                    <input type="text" id="name" name="summary" placeholder="Summary">
-	                </div>
-	                <div class="inputBox">
-	                    <input type="submit" value="Complete Offer!" id="btn">
-	                </div>
-	            </div>
-	    	</form>
+                        <textarea id="summary" name="summary" placeholder="Summary"></textarea>
+                    </div>
+                    <div class="inputBox">
+                        <input type="submit" value="Complete Offer!" id="btn">
+                    </div>
+                </div>
+            </form>
         </div>
     </section>
+    <script>
+        document.getElementById("bookOfferForm").addEventListener("submit", function(event) {
+            var title = document.getElementById("title").value;
+            var bookAuthors = document.getElementById("bookAuthors").value;
+            var bookCategory = document.getElementById("bookCategory").value;
+            var summary = document.getElementById("summary").value;
+
+            if (title.trim() === "" || bookAuthors.trim() === "" || bookCategory.trim() === "" || summary.trim() === "") {
+                alert("Please fill in all fields.");
+                event.preventDefault();
+            }
+            
+            if (summary.trim().length > 255) {
+                alert("Summary must be 255 characters or fewer.");
+                event.preventDefault();
+            }
+        });
+    </script>
 </body>
 
 </html>

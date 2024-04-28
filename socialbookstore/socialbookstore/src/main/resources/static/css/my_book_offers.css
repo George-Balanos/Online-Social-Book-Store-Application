@@ -93,7 +93,7 @@ body {
 .plus-button {
     position: absolute;
     font-size: 40px;
-    top: 45%;
+    top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
@@ -110,19 +110,23 @@ body {
 #book_title{
   margin-top: 5px;
   margin-bottom: 2px;
-  border: 1px solid black;
 }
 
 #book_category{
   margin-top: 0;
   margin-bottom: 2px;
-  border: 1px solid black;
 }
 
 #summary {
   overflow-y: scroll;
   width: 200px;
   max-height: 100px;
+}
+
+#summary p {
+	white-space: normal;
+	overflow: visible;
+	word-wrap: break-word;
 }
 
 #summary::-webkit-scrollbar {

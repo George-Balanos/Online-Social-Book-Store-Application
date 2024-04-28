@@ -71,48 +71,49 @@ public class UserController {
 	private RecommendationEngine recommendationEngine = new RecommendationEngine();
 	private RecommendationEngineStrategy recommendationEngineStrategy;
 	
-	@RequestMapping("/success")
-	public String getUserHome(Model model) {
+	public Optional<UserProfile> getCurrentUserProfile(){
+		Optional<User> user = getCurrentUser();
+		Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
+		
+		return currentUser;
+	}
+	
+	public Optional<User> getCurrentUser(){
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 		System.err.println(currentPrincipalName);
-		
 		Optional<User> user = userService.getUser(currentPrincipalName);
 		
-		Optional<UserProfile> currentUser = userProfileService.findUserProfileById(user.get().getUserId());
-		model.addAttribute("currentUser",currentUser);
+		return user;
+	}
+	
+	@RequestMapping("/success")
+	public String getUserHome(Model model) {		
+		model.addAttribute("currentUser",getCurrentUserProfile());
 		
-		List<String> usersReq = userProfileMapper.getUsersRequests(user.get().getUserId());
+		List<String> usersRequests = userProfileMapper.getUsersRequests(getCurrentUser().get().getUserId());
 		
 		List<Request> requestList = new ArrayList<>();
 		List<UserProfile> userProfileRequesters = new ArrayList<>();
 		
-        System.out.println("Size of users requests: " + usersReq.size());
+        //System.out.println("Size of users requests: " + usersRequests.size());
         
-        
-        for (String id : usersReq) {
-        	
+        for (String id : usersRequests) {
         	String[] temp = id.split(",");
-        	
         	try {
-        		
                 Integer borrowerId = Integer.parseInt(temp[0].trim()); 
                 Integer bookId = Integer.parseInt(temp[1].trim()); 
                 
-                System.out.println("Requester id: " + borrowerId);
-                Optional<UserProfile> tmp = userProfileMapper.findByUserProfileId(borrowerId);
+                //System.out.println("Requester id: " + borrowerId);
+                Optional<UserProfile> tmpBorrowerProfile = userProfileMapper.findByUserProfileId(borrowerId);
                 
-                if (tmp.isPresent()) {
-                	
+                if (tmpBorrowerProfile.isPresent()) {
                     Request newRequest = new Request(borrowerId,bookId);
                     newRequest.setBookTitle(bookService.getById(bookId).get().getTitle());
                     requestList.add(newRequest);
-                    userProfileRequesters.add(tmp.get());
-                    
+                    userProfileRequesters.add(tmpBorrowerProfile.get());
                 } else {
-                	
                     System.out.println("User with id " + borrowerId + " not found.");
-                    
                 }
                 
             } catch (NumberFormatException e) {
@@ -120,20 +121,25 @@ public class UserController {
             }
         }
         
-        System.out.println(requestList.size());
+        //System.out.println(requestList.size());
         
         model.addAttribute("requestingUsers", requestList);
         model.addAttribute("userProfileRequesters", userProfileRequesters);
         
         
+        List<String> reviewedRequests = userProfileService.getClosedRequests(getCurrentUser().get().getUserId());
         
-        List<String> closedRequests = userProfileService.getClosedRequests(user.get().getUserId());
+        model.addAttribute("myResponses",getMyResponses(reviewedRequests));
         
-        List<Request> myResponses = new ArrayList<>();
+		return "/dashboard";
+	}
+	
+	public List<Request> getMyResponses(List<String> reviewedRequests){
+		List<Request> myResponses = new ArrayList<>();
         
-        System.out.println(myResponses.size());
+        //System.out.println(myResponses.size());
         
-        for(String request: closedRequests) {
+        for(String request: reviewedRequests) {
         	String[] tempRequest = request.split(",");
         	
         	Integer bookId = Integer.parseInt(tempRequest[0].trim());
@@ -145,10 +151,7 @@ public class UserController {
         	myResponses.add(newRequest);
         }
         
-        model.addAttribute("myResponses",myResponses);
-        
-        
-		return "/dashboard";
+        return myResponses;
 	}
 	
 	@PostMapping("/search_exact_author")
